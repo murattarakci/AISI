@@ -28,59 +28,38 @@
   .filter-btn:hover { color:rgba(215,234,247,0.85); }
   .filter-btn.active { color:var(--imd-white); border-bottom-color:var(--imd-white); }
 
-  main { max-width:1150px; margin:0 auto; padding:24px 28px 50px; }
-
-  /* ---------- the live 2x2 ---------- */
-  .gridwrap { display:grid; grid-template-columns:150px 1fr 1fr; grid-template-rows:auto 1fr 1fr; gap:10px; margin-bottom:34px; }
-  .axis-x { text-align:center; font-size:12px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--imd-navy); padding-bottom:2px; }
-  .axis-x small { display:block; font-weight:300; letter-spacing:0; text-transform:none; color:#6a6f8e; font-size:12px; }
-  .axis-y { font-size:12px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--imd-navy); align-self:center; }
-  .axis-y small { display:block; font-weight:300; letter-spacing:0; text-transform:none; color:#6a6f8e; font-size:12px; margin-top:3px; }
-  .q { border-radius:10px; padding:14px 16px; min-height:170px; display:flex; flex-direction:column; }
-  .q h3 { font-size:14px; font-weight:700; margin-bottom:10px; }
-  .q.replace, .q.automate { background:#EFEEE6; }
-  .q.assist { background:var(--imd-light-blue); }
-  .q.rewire { background:var(--imd-navy); color:var(--imd-white); }
-  .q.rewire h3 { color:var(--imd-white); }
-  .lane { display:flex; flex-wrap:wrap; gap:6px; align-items:center; min-height:30px; margin-bottom:8px; }
-  .lane .k { font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#6a6f8e; width:38px; flex:none; }
-  .q.rewire .lane .k { color:rgba(255,255,255,0.6); }
-  .badge { font-size:12px; font-weight:600; padding:5px 10px; border-radius:999px; background:var(--imd-navy); color:var(--imd-white); border:2px solid var(--imd-navy); cursor:pointer; }
-  .badge.next { background:transparent; color:var(--imd-navy); border-style:dashed; }
-  .q.rewire .badge { background:var(--sky); color:var(--imd-navy); border-color:var(--sky); }
-  .q.rewire .badge.next { background:transparent; color:var(--sky); }
-  .legend { font-size:12px; color:#6a6f8e; font-weight:300; margin:-22px 0 30px; text-align:right; }
-  .legend .badge { font-size:10px; padding:2px 8px; cursor:default; margin-left:8px; }
-
-  /* ---------- list ---------- */
-  .lrow { display:grid; grid-template-columns:80px 1fr 1fr 170px 74px 40px; gap:14px; align-items:center; background:var(--imd-white); border-radius:10px; padding:14px 20px; margin-bottom:10px; box-shadow:0 2px 8px rgba(0,10,86,0.06); }
+  #list { padding:20px 28px 50px; max-width:1150px; margin:0 auto; }
+  .lrow { display:grid; grid-template-columns:1fr 82px 130px 74px 40px; gap:14px; align-items:center; background:var(--imd-white); border-radius:10px; padding:16px 20px; margin-bottom:10px; box-shadow:0 2px 8px rgba(0,10,86,0.06); }
   .lrow.head { background:transparent; box-shadow:none; padding:6px 20px; margin-bottom:4px; font-size:12px; font-weight:300; color:#6a6f8e; text-transform:uppercase; letter-spacing:0.06em; }
-  .c-tbl { font-weight:700; font-size:15px; }
-  .c-txt { font-size:14px; line-height:1.35; }
-  .c-txt .dim { color:#9a9eb5; font-weight:300; }
-  .c-move { font-size:12px; font-weight:600; color:var(--imd-blue); }
-  .c-move .arr { color:#9a9eb5; margin:0 4px; }
+  .lrow.flagged { opacity:0.45; }
+  .c-card .stmt { font-weight:600; font-size:17px; line-height:1.3; letter-spacing:-0.01em; }
+  .c-card .stmt .fill { color:var(--imd-blue); }
+  .c-card .sub { font-weight:300; font-size:13px; color:#6a6f8e; margin-top:3px; }
+  .c-card .flag-note { font-weight:600; font-size:11px; color:var(--orange); margin-top:3px; text-transform:uppercase; letter-spacing:0.05em; }
+  .c-score { font-weight:600; font-size:15px; text-align:center; }
+  .c-score.dim { color:#b6b9c9; font-weight:300; }
+  .c-date { font-weight:300; font-size:13px; color:#6a6f8e; text-align:center; }
   .c-show { font-family:inherit; font-size:13px; font-weight:600; padding:8px 14px; border-radius:999px; cursor:pointer; border:1.5px solid var(--imd-blue); background:transparent; color:var(--imd-blue); }
   .c-show:hover { background:var(--imd-light-blue); }
   .c-del { background:none; border:none; cursor:pointer; color:#b6b9c9; font-size:19px; line-height:1; font-family:inherit; padding:6px; justify-self:center; }
   .c-del:hover { color:var(--orange); }
-  #empty { text-align:center; padding:60px 20px; font-weight:300; font-size:17px; color:#3a4066; }
+  #empty { text-align:center; padding:80px 20px; font-weight:300; font-size:17px; color:#3a4066; }
 
-  /* ---------- full-screen brief ---------- */
   #big[hidden] { display:none; }
-  #big { position:fixed; inset:0; z-index:900; background:var(--imd-navy); background-image:radial-gradient(rgba(255,255,255,0.2) 1.4px, transparent 1.4px); background-size:34px 34px; padding:5vh 7vw; overflow:auto; color:var(--imd-white); }
+  #big { position:fixed; inset:0; z-index:900; background:var(--imd-navy); background-image:radial-gradient(rgba(255,255,255,0.2) 1.4px, transparent 1.4px); background-size:34px 34px; display:flex; flex-direction:column; justify-content:center; padding:6vw 8vw; overflow:auto; }
+  #big .stmt { color:var(--imd-white); font-weight:600; font-size:clamp(28px,4.6vw,68px); line-height:1.18; letter-spacing:-0.01em; }
+  #big .stmt .fill { color:var(--sky); }
+  #big .sub { color:rgba(255,255,255,0.8); font-weight:300; font-size:clamp(15px,1.6vw,22px); margin-top:2.5vh; }
+  #big .detail { margin-top:5vh; display:grid; grid-template-columns:1fr 1fr; gap:2.5vh 4vw; max-width:1100px; }
+  #big .df { border-top:1px solid rgba(255,255,255,0.22); padding-top:1.2vh; }
+  #big .df.wide { grid-column:1 / -1; }
+  #big .df .l { color:var(--sky); font-size:clamp(10px,0.9vw,13px); font-weight:600; letter-spacing:0.09em; text-transform:uppercase; margin-bottom:0.6vh; }
+  #big .df .v { color:var(--imd-white); font-size:clamp(14px,1.5vw,19px); line-height:1.3; }
+  #big .df .v.empty { color:rgba(255,255,255,0.35); }
   #big .close { position:absolute; top:24px; right:30px; background:none; border:2px solid rgba(255,255,255,0.4); border-radius:999px; color:rgba(255,255,255,0.75); cursor:pointer; font-family:inherit; font-size:14px; font-weight:600; padding:9px 18px; }
   #big .close:hover { border-color:var(--imd-white); color:var(--imd-white); }
-  #big h2 { font-size:clamp(22px,2.4vw,34px); font-weight:300; color:var(--sky); margin-bottom:3vh; }
-  #big h2 b { font-weight:700; color:var(--imd-white); }
-  .bgrid { display:grid; grid-template-columns:1fr 1fr; gap:3vh 4vw; }
-  .bf { border-top:1px solid rgba(255,255,255,0.25); padding-top:1.4vh; }
-  .bf.wide { grid-column:1 / -1; }
-  .bf .l { color:var(--sky); font-size:clamp(11px,1vw,14px); font-weight:600; letter-spacing:0.09em; text-transform:uppercase; margin-bottom:0.8vh; }
-  .bf .v { font-size:clamp(18px,2.1vw,32px); line-height:1.25; font-weight:400; }
-  .bf .v .tag { display:inline-block; font-size:0.62em; font-weight:600; background:var(--sky); color:var(--imd-navy); border-radius:999px; padding:0.15em 0.7em; margin-left:0.5em; vertical-align:middle; }
-  .bf .v.empty { color:rgba(255,255,255,0.35); font-weight:300; }
-  @media (max-width:760px) { .gridwrap { grid-template-columns:1fr 1fr; } .axis-y { display:none; } .lrow { grid-template-columns:60px 1fr 64px 36px; } .c-txt.b, .c-move { display:none; } }
+
+  @media (max-width:760px) { .lrow { grid-template-columns:1fr 60px 64px 36px; } .c-date { display:none; } #big .detail { grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
@@ -95,34 +74,21 @@
   <div class="filters"><button class="filter-btn" id="f-today">Today only</button></div>
 </header>
 
-<main>
-  <div class="gridwrap">
-    <div></div>
-    <div class="axis-x">Substitution<small>AI does the work instead of people</small></div>
-    <div class="axis-x">Augmentation<small>AI does the work with people</small></div>
-    <div class="axis-y">Architecture<small>of the process</small></div>
-    <div class="q replace" data-q="replace"><h3>Replace the layer</h3><div class="lane" data-k="now"><span class="k">Now</span></div><div class="lane" data-k="next"><span class="k">Next</span></div></div>
-    <div class="q rewire" data-q="rewire"><h3>Rewire around the constraint</h3><div class="lane" data-k="now"><span class="k">Now</span></div><div class="lane" data-k="next"><span class="k">Next</span></div></div>
-    <div class="axis-y">A single<small>process</small></div>
-    <div class="q automate" data-q="automate"><h3>Automate the task</h3><div class="lane" data-k="now"><span class="k">Now</span></div><div class="lane" data-k="next"><span class="k">Next</span></div></div>
-    <div class="q assist" data-q="assist"><h3>Assist the task</h3><div class="lane" data-k="now"><span class="k">Now</span></div><div class="lane" data-k="next"><span class="k">Next</span></div></div>
-  </div>
-  <p class="legend">Each table appears twice: <span class="badge">now</span><span class="badge next">aiming for</span></p>
-
-  <div id="list"></div>
-  <p id="empty" hidden>No briefs yet. They appear here live as tables fill theirs in.</p>
-</main>
+<div id="list"></div>
+<p id="empty" hidden>No briefs yet. They appear here live as tables fill theirs in, sorted by the sharpest "not / but" contrast.</p>
 
 <div id="big" hidden>
   <button class="close" id="big-close">Back to list (Esc)</button>
-  <h2 id="big-title"></h2>
-  <div class="bgrid" id="big-grid"></div>
+  <p class="stmt" id="big-stmt"></p>
+  <p class="sub" id="big-sub"></p>
+  <div class="detail" id="big-detail"></div>
 </div>
 
 <script type="module">
 const PW_HASH = "549c7fee864542f5de2f19293bd6ca2236c5e38588b3983508055d2e9dfbfbc3";
 const COLL = window.FIREBASE_COLLECTION || "aisi_briefs";
-const LABELS = { automate:"Automate the task", assist:"Assist the task", replace:"Replace the layer", rewire:"Rewire around the constraint", substitution:"Substitution", augmentation:"Augmentation" };
+const LABELS = { substitution:"Substitution", augmentation:"Augmentation" };
+
 async function sha256(s) { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)); return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, "0")).join(""); }
 const gate = document.getElementById("gate");
 document.getElementById("gate-form").addEventListener("submit", async (e) => {
@@ -134,59 +100,91 @@ document.getElementById("gate-form").addEventListener("submit", async (e) => {
 let briefs = [], todayOnly = false, started = false, db = null, fsDoc = null, fsSetDoc = null;
 const list = document.getElementById("list"), empty = document.getElementById("empty"), countEl = document.getElementById("count");
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
-const tableName = (b, i) => b.table || ("Brief " + (i + 1));
 
-function shown() {
-  const sod = new Date(); sod.setHours(0,0,0,0);
-  return briefs.filter((b) => !(todayOnly && (!b.ts || b.ts < sod)));
+/* ---------- contrast scoring: in-browser MiniLM embeddings, same approach as LTAIS ---------- */
+let extractor = null;
+const scoreCache = new Map();
+async function ensureModel() {
+  if (extractor) return;
+  const { pipeline, env } = await import("https://cdn.jsdelivr.net/npm/@xenova/transformers@2.17.2/+esm");
+  env.allowLocalModels = false;
+  extractor = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2");
 }
+async function contrastScore(b1, b2) {
+  const key = b1 + " || " + b2;
+  if (scoreCache.has(key)) return scoreCache.get(key);
+  const [e1, e2] = await Promise.all([
+    extractor(b1, { pooling: "mean", normalize: true }),
+    extractor(b2, { pooling: "mean", normalize: true })
+  ]);
+  let dot = 0;
+  for (let i = 0; i < e1.data.length; i++) dot += e1.data[i] * e2.data[i];
+  const score = (1 - dot) / 2; // 0 = same meaning, 1 = maximal contrast
+  scoreCache.set(key, score);
+  return score;
+}
+async function scoreAll() {
+  if (!extractor) return;
+  for (const b of briefs) if (b.rewire_not && b.rewire_but) b.score = await contrastScore(b.rewire_not, b.rewire_but);
+}
+
+/* ---------- profanity check: flagged briefs sink to the bottom ---------- */
+const PROFANITY = /\b(fuck\w*|shit\w*|bitch\w*|cunt\w*|asshole\w*|arsehole\w*|bastard\w*|dickhead\w*|wanker\w*|slut\w*|whore\w*|nigg\w+|fag\w*|retard\w*|piss\w*|bollocks|bullshit|motherfuck\w*|cock\w*|twat\w*)\b/i;
+function isFlagged(b) { return PROFANITY.test([b.rewire_not, b.rewire_but, b.table, b.process, b.constraint].join(" ")); }
+
+function stmtHTML(b) {
+  const n = b.rewire_not ? '<span class="fill">' + esc(b.rewire_not) + "</span>" : "____";
+  const t = b.rewire_but ? '<span class="fill">' + esc(b.rewire_but) + "</span>" : "____";
+  return "Our rewire is not " + n + ", but " + t + ".";
+}
+
 function render() {
-  const s = shown();
-  s.sort((a, b) => (a.table || "").localeCompare(b.table || "", undefined, { numeric: true }) || ((b.ts?.getTime() ?? 0) - (a.ts?.getTime() ?? 0)));
-  countEl.textContent = s.length + " brief" + (s.length === 1 ? "" : "s");
-  empty.hidden = s.length > 0;
-  // grid badges
-  document.querySelectorAll(".lane").forEach((l) => l.querySelectorAll(".badge").forEach((x) => x.remove()));
-  s.forEach((b, i) => {
-    for (const k of ["now", "next"]) {
-      if (!b[k]) continue;
-      const lane = document.querySelector('.q[data-q="' + b[k] + '"] .lane[data-k="' + k + '"]');
-      if (!lane) continue;
-      const el = document.createElement("button"); el.className = "badge" + (k === "next" ? " next" : ""); el.textContent = tableName(b, i); el.dataset.id = b.id;
-      lane.appendChild(el);
-    }
+  const sod = new Date(); sod.setHours(0, 0, 0, 0);
+  const shown = briefs.filter((b) => !(todayOnly && (!b.ts || b.ts < sod)));
+  shown.sort((a, b) => {
+    if (a.flagged !== b.flagged) return a.flagged ? 1 : -1;
+    const byScore = (b.score ?? -1) - (a.score ?? -1);
+    if (byScore !== 0) return byScore;
+    return (b.ts?.getTime() ?? 0) - (a.ts?.getTime() ?? 0);
   });
-  const head = '<div class="lrow head"><span>Table</span><span>Process</span><span>Binding constraint</span><span>Now → next</span><span></span><span></span></div>';
-  list.innerHTML = (s.length ? head : "") + s.map((b, i) =>
-    '<div class="lrow">' +
-    '<span class="c-tbl">' + esc(tableName(b, i)) + '</span>' +
-    '<span class="c-txt">' + (b.process ? esc(b.process) : '<span class="dim">—</span>') + '</span>' +
-    '<span class="c-txt b">' + (b.constraint ? esc(b.constraint) : '<span class="dim">—</span>') + '</span>' +
-    '<span class="c-move">' + esc(LABELS[b.now] || "—") + '<span class="arr">→</span>' + esc(LABELS[b.next] || "—") + '</span>' +
-    '<button class="c-show" data-id="' + esc(b.id) + '">View</button>' +
-    '<button class="c-del" data-id="' + esc(b.id) + '" title="Remove this brief">&times;</button></div>'
-  ).join("");
+  countEl.textContent = shown.length + " brief" + (shown.length === 1 ? "" : "s");
+  empty.hidden = shown.length > 0;
+  const head = '<div class="lrow head"><span>Brief</span><span style="text-align:center">Contrast</span><span style="text-align:center">Entered</span><span></span><span></span></div>';
+  list.innerHTML = (shown.length ? head : "") + shown.map((b) => {
+    const score = b.score != null ? '<span class="c-score">' + Math.round(b.score * 100) + "</span>" : '<span class="c-score dim">&ndash;</span>';
+    const when = b.ts ? b.ts.toLocaleString([], { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) : "&ndash;";
+    return (
+      '<div class="lrow' + (b.flagged ? " flagged" : "") + '">' +
+      '<div class="c-card"><p class="stmt">' + stmtHTML(b) + "</p>" +
+      (b.table || b.process ? '<p class="sub">' + [b.table, b.process].filter(Boolean).map(esc).join(" — ") + "</p>" : "") +
+      (b.flagged ? '<p class="flag-note">Flagged: possible profanity</p>' : "") +
+      "</div>" + score +
+      '<span class="c-date">' + when + "</span>" +
+      '<button class="c-show" data-id="' + esc(b.id) + '">View</button>' +
+      '<button class="c-del" data-id="' + esc(b.id) + '" title="Remove this brief">&times;</button></div>'
+    );
+  }).join("");
 }
 
 const big = document.getElementById("big");
 function openBig(b) {
-  const F = [["process","The process",1],["constraint","Its binding constraint",1],["task","The task we move",0,"mode"],["change","What we expect to change",0],
-             ["know","How we will know",0],["notyet","What we will not automate yet",0],["now","Our quadrant now",0,null,true],["next","The quadrant we are aiming for",0,null,true,"next_true"]];
-  document.getElementById("big-title").innerHTML = "Rewire brief <b>" + esc(b.table || "") + "</b>";
-  document.getElementById("big-grid").innerHTML = F.map(([k, l, wide, tag, isQ, extra]) => {
-    let v = isQ ? (LABELS[b[k]] || "") : (b[k] || "");
-    let html = v ? esc(v) : '<span class="empty">—</span>';
-    if (tag && b[tag]) html += '<span class="tag">' + esc(LABELS[b[tag]]) + "</span>";
-    if (extra && b[extra]) html += '<div style="font-size:0.75em;opacity:0.85;margin-top:0.4em">' + esc(b[extra]) + "</div>";
-    return '<div class="bf' + (wide ? " wide" : "") + '"><div class="l">' + l + '</div><div class="v' + (v ? "" : " empty") + '">' + html + "</div></div>";
+  document.getElementById("big-stmt").innerHTML = stmtHTML(b);
+  document.getElementById("big-sub").innerHTML = [b.table, b.process].filter(Boolean).map(esc).join(" &mdash; ");
+  const F = [["constraint","Its binding constraint",1],["task","The task we move",0],["change","What we expect to change",0],
+             ["know","How we will know",0],["notyet","What we will not automate yet",0]];
+  document.getElementById("big-detail").innerHTML = F.map(([k, l, wide]) => {
+    let v = b[k] || "";
+    if (k === "task" && b.mode) v = (v ? v + " " : "") + "(" + (LABELS[b.mode] || b.mode) + ")";
+    return '<div class="df' + (wide ? " wide" : "") + '"><div class="l">' + l + '</div><div class="v' + (v ? "" : " empty") + '">' + (v ? esc(v) : "—") + "</div></div>";
   }).join("");
   big.hidden = false;
 }
 function closeBig() { big.hidden = true; }
 document.getElementById("big-close").addEventListener("click", closeBig);
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeBig(); });
-document.addEventListener("click", async (e) => {
-  const show = e.target.closest(".c-show, .badge[data-id]");
+
+list.addEventListener("click", async (e) => {
+  const show = e.target.closest(".c-show");
   if (show) { const b = briefs.find((x) => x.id === show.dataset.id); if (b) openBig(b); return; }
   const del = e.target.closest(".c-del");
   if (del && db) { if (!confirm("Remove this brief from the view?")) return; await fsSetDoc(fsDoc(db, COLL, del.dataset.id), { hidden: true }, { merge: true }); }
@@ -199,9 +197,18 @@ async function start() {
   const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
   const { getFirestore, collection, query, orderBy, onSnapshot, doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
   db = getFirestore(initializeApp(window.FIREBASE_CONFIG)); fsDoc = doc; fsSetDoc = setDoc;
+
+  ensureModel().then(() => scoreAll()).then(render).catch((e) => console.warn("model load failed", e));
+
   onSnapshot(query(collection(db, COLL), orderBy("ts", "desc")), (snap) => {
-    briefs = snap.docs.filter((d) => !d.data().hidden).map((d) => { const v = d.data(); return { id: d.id, ...v, ts: v.ts && v.ts.toDate ? v.ts.toDate() : null }; });
+    briefs = snap.docs.filter((d) => !d.data().hidden).map((d) => {
+      const v = d.data();
+      const b = { id: d.id, ...v, ts: v.ts && v.ts.toDate ? v.ts.toDate() : null, score: null };
+      b.flagged = isFlagged(b);
+      return b;
+    });
     render();
+    if (extractor) scoreAll().then(render);
   }, (err) => {
     empty.hidden = false;
     empty.textContent = err.code === "permission-denied"

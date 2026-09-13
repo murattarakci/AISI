@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rewire Brief | IMD AI Strategy and Implementation</title>
-<meta name="description" content="Write your table's rewire brief: the process, its binding constraint, the task you move, and the quadrant you are aiming for.">
+<meta name="description" content="Write your table's rewire brief: the process, its binding constraint, the task you move, and what your rewire is not, but is.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Rewire Brief — IMD AI Strategy and Implementation">
-<meta property="og:description" content="One process. One binding constraint. One move. Part of IMD's AI Strategy and Implementation programme.">
+<meta property="og:description" content="Our rewire is not ___, but ___. Part of IMD's AI Strategy and Implementation programme.">
 <meta property="og:url" content="https://murattarakci.github.io/AISI/">
 <meta property="og:image" content="https://murattarakci.github.io/AISI/assets/og-card.png">
 <meta property="og:image:width" content="1200">
@@ -28,12 +28,11 @@
   .intro p { font-weight:300; font-size:clamp(15px,2vw,18px); color:#3a4066; }
   .intro p strong { font-weight:600; }
 
-  /* ---------- the brief (exported) ---------- */
   .card-wrap { width:100%; max-width:820px; }
   #card { container-type:inline-size; width:100%; background-color:var(--imd-navy);
     background-image:radial-gradient(rgba(255,255,255,0.20) 1.1px, transparent 1.1px); background-size:26px 26px; background-position:8px 8px;
     border-radius:6px; overflow:hidden; padding:4.6% 5% 4%; box-shadow:0 18px 50px rgba(0,10,86,0.22); }
-  .card-top { display:flex; justify-content:space-between; align-items:flex-start; gap:3%; margin-bottom:4.5%; }
+  .card-top { display:flex; justify-content:space-between; align-items:flex-start; gap:3%; margin-bottom:4%; }
   .card-logo { width:24%; min-width:140px; }
   .card-logo svg { display:block; width:100%; height:auto; }
   .card-title { text-align:right; color:var(--imd-white); }
@@ -41,6 +40,17 @@
   .card-title .table { font-weight:300; font-size:2.3cqw; color:var(--sky); margin-top:0.35em; }
   .card-title .table .who { display:inline-block; min-width:4em; outline:none; }
   .card-title .table .who:empty::before { content:attr(data-ph); color:rgba(159,225,255,0.5); }
+
+  /* ---------- the outcome statement (the payoff line) ---------- */
+  .stmt-wrap { margin-bottom:4.5%; padding-bottom:3.5%; border-bottom:1px solid rgba(255,255,255,0.25); }
+  .stmt { color:var(--imd-white); font-weight:600; font-size:4.6cqw; line-height:1.22; letter-spacing:-0.01em; }
+  .stmt [contenteditable] { outline:none; border-radius:3px; }
+  .stmt [contenteditable]:focus { background:rgba(255,255,255,0.08); }
+  .blank { color:var(--sky); padding:0 0.1em; text-decoration:underline; text-decoration-color:rgba(159,225,255,0.55); text-decoration-thickness:0.07em; text-underline-offset:0.16em; }
+  .blank:empty { display:inline-block; min-width:3.2em; text-align:center; text-decoration:none; border-bottom:0.1em solid rgba(159,225,255,0.55); }
+  .blank:empty::before { content:attr(data-ph); color:rgba(159,225,255,0.4); font-weight:300; }
+  .exporting .blank:empty::before { content:""; }
+  .exporting .stmt [contenteditable]:focus { background:transparent; }
 
   .fields { display:grid; grid-template-columns:1fr 1fr; gap:3.2% 4%; }
   .field { border-top:1px solid rgba(255,255,255,0.22); padding-top:2.2cqw; min-height:9.5cqw; }
@@ -58,15 +68,12 @@
   .pill:hover { border-color:rgba(255,255,255,0.8); color:var(--imd-white); }
   .pill.on { background:var(--sky); border-color:var(--sky); color:var(--imd-navy); }
   .exporting .pill:not(.on) { display:none; }
-  .subval { margin-top:1.1cqw; padding-bottom:0.6cqw; }
-  .subval .val { font-size:2.0cqw; color:rgba(255,255,255,0.92); }
 
-  .card-footer { display:flex; justify-content:space-between; align-items:baseline; gap:2%; margin-top:7%; padding-top:2.2cqw; border-top:1px solid rgba(255,255,255,0.22); }
+  .card-footer { display:flex; justify-content:space-between; align-items:baseline; gap:2%; margin-top:4.5%; padding-top:2.2cqw; border-top:1px solid rgba(255,255,255,0.22); }
   .card-tag { color:rgba(255,255,255,0.75); font-weight:300; font-size:1.9cqw; letter-spacing:0.02em; }
   .card-program { color:rgba(255,255,255,0.55); font-weight:300; font-size:1.7cqw; letter-spacing:0.03em; white-space:nowrap; text-decoration:none; }
   .card-program:hover { color:rgba(255,255,255,0.85); text-decoration:underline; }
 
-  /* ---------- controls ---------- */
   .actions { display:flex; justify-content:center; gap:12px; margin-top:22px; flex-wrap:wrap; }
   .btn { font-family:inherit; font-size:15px; font-weight:600; padding:13px 24px; border-radius:999px; cursor:pointer;
     border:2px solid var(--imd-blue); background:var(--imd-blue); color:var(--imd-white); display:inline-flex; align-items:center; gap:9px; transition:transform .08s ease, box-shadow .15s ease; }
@@ -86,7 +93,7 @@
 
 <div class="intro">
   <h1>Your table's rewire brief</h1>
-  <p>Eight fields, none longer than a sentence. <strong>Tap any text to edit it.</strong> A plan says what you will build; a brief says what would have to be true.</p>
+  <p>Tap any text to edit it.</p>
 </div>
 
 <div class="card-wrap">
@@ -102,6 +109,14 @@
         <div class="t">Rewire brief</div>
         <div class="table"><span class="who" id="table" contenteditable="true" spellcheck="true" data-ph="Table 1"></span></div>
       </div>
+    </div>
+
+    <div class="stmt-wrap">
+      <p class="stmt" id="statement">
+        <span contenteditable="true" spellcheck="true">Our rewire is not</span>
+        <span class="blank" contenteditable="true" spellcheck="true" data-field="rewire_not" data-ph="automating the chat"></span><span contenteditable="true" spellcheck="true">, but</span>
+        <span class="blank" contenteditable="true" spellcheck="true" data-field="rewire_but" data-ph="freeing someone to own the hard case"></span><span contenteditable="true" spellcheck="true">.</span>
+      </p>
     </div>
 
     <div class="fields">
@@ -129,15 +144,6 @@
       <div class="field">
         <div class="label">What we will not automate yet</div>
         <div class="val" data-field="notyet" contenteditable="true" spellcheck="true" data-ph="And why."></div>
-      </div>
-      <div class="field">
-        <div class="label">Our quadrant now</div>
-        <span class="pills" data-field="now"><button type="button" class="pill" data-v="automate">Automate the task</button><button type="button" class="pill" data-v="assist">Assist the task</button><button type="button" class="pill" data-v="replace">Replace the layer</button><button type="button" class="pill" data-v="rewire">Rewire around the constraint</button></span>
-      </div>
-      <div class="field">
-        <div class="label">The quadrant we are aiming for</div>
-        <span class="pills" data-field="next"><button type="button" class="pill" data-v="automate">Automate the task</button><button type="button" class="pill" data-v="assist">Assist the task</button><button type="button" class="pill" data-v="replace">Replace the layer</button><button type="button" class="pill" data-v="rewire">Rewire around the constraint</button></span>
-        <div class="subval"><div class="val" data-field="next_true" contenteditable="true" spellcheck="true" data-ph="What has to be true to get there?"></div></div>
       </div>
     </div>
 
@@ -171,11 +177,10 @@
   const card = document.getElementById("card");
   const toast = document.getElementById("toast");
   const PROGRAM_URL = "https://www.imd.org/digital-transformation/aisi/ai-strategy-and-implementation/";
-  const LABELS = { automate:"Automate the task", assist:"Assist the task", replace:"Replace the layer", rewire:"Rewire around the constraint", substitution:"Substitution", augmentation:"Augmentation" };
+  const LABELS = { substitution:"Substitution", augmentation:"Augmentation" };
 
   function showToast(msg) { toast.textContent = msg; toast.classList.add("show"); clearTimeout(showToast._t); showToast._t = setTimeout(() => toast.classList.remove("show"), 3200); }
 
-  /* pills: single-select per group */
   document.querySelectorAll(".pills").forEach((g) => {
     g.addEventListener("click", (e) => {
       const b = e.target.closest(".pill"); if (!b) return;
@@ -186,18 +191,31 @@
     });
   });
 
-  /* editing: single line, plain text */
+  /* auto-fit: shrink the outcome statement if it would wrap onto too many lines */
+  const stmtEl = document.getElementById("statement");
+  function fitStatement() {
+    let size = 4.6;
+    stmtEl.style.fontSize = size + "cqw";
+    while (size > 2.6 && stmtEl.scrollHeight > stmtEl.clientHeight + stmtEl.offsetHeight * 0.02 + 4) {
+      size -= 0.2;
+      stmtEl.style.fontSize = size.toFixed(1) + "cqw";
+    }
+  }
+  window.addEventListener("resize", fitStatement);
+
   document.querySelectorAll("[contenteditable]").forEach((el) => {
     el.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); el.blur(); } });
     el.addEventListener("paste", (e) => { e.preventDefault(); const t = (e.clipboardData || window.clipboardData).getData("text/plain"); document.execCommand("insertText", false, t.replace(/\s+/g, " ")); });
-    el.addEventListener("input", () => card.dispatchEvent(new CustomEvent("brief-change")));
+    el.addEventListener("input", () => { card.dispatchEvent(new CustomEvent("brief-change")); fitStatement(); });
   });
+  fitStatement();
 
   function pillVal(name) { const on = document.querySelector('.pills[data-field="' + name + '"] .pill.on'); return on ? on.dataset.v : ""; }
   window.__briefData = function () {
     const d = { table: document.getElementById("table").textContent.trim() };
     document.querySelectorAll(".val[data-field]").forEach((v) => { d[v.dataset.field] = v.textContent.trim(); });
-    d.mode = pillVal("mode"); d.now = pillVal("now"); d.next = pillVal("next");
+    document.querySelectorAll(".stmt .blank[data-field]").forEach((b) => { d[b.dataset.field] = b.textContent.trim(); });
+    d.mode = pillVal("mode");
     return d;
   };
 
@@ -207,14 +225,14 @@
     return [
       "REWIRE BRIEF" + (d.table ? " — " + d.table : ""),
       "",
+      "Our rewire is not " + (d.rewire_not || "____") + ", but " + (d.rewire_but || "____") + ".",
+      "",
       "The process: " + (d.process || "—"),
       "Its binding constraint: " + (d.constraint || "—"),
       "The task we move: " + (d.task || "—") + (d.mode ? " (" + L(d.mode) + ")" : ""),
       "What we expect to change: " + (d.change || "—"),
       "How we will know: " + (d.know || "—"),
       "What we will not automate yet: " + (d.notyet || "—"),
-      "Our quadrant now: " + (L(d.now) || "—"),
-      "The quadrant we are aiming for: " + (L(d.next) || "—") + (d.next_true ? " — " + d.next_true : ""),
       "",
       "IMD · AI Strategy and Implementation",
       PROGRAM_URL
@@ -242,7 +260,6 @@
 </script>
 
 <script type="module">
-// Record the brief to Firestore (if configured) so the facilitator view can plot it.
 if (window.FIREBASE_CONFIG) {
   try {
     const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
@@ -255,7 +272,7 @@ if (window.FIREBASE_CONFIG) {
     async function submit() {
       try {
         const d = window.__briefData();
-        if (!Object.values(d).some((v) => v)) return; // untouched
+        if (!Object.values(d).some((v) => v)) return;
         await setDoc(doc(db, COLL, id), { ...d, ts: serverTimestamp() }, { merge: true });
       } catch (e) {
         console.warn("brief submit failed", e);
