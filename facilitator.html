@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facilitator View | IMD AI Strategy and Implementation</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="firebase-config.js"></script>
+<style>
+  :root { --imd-navy:#000A56; --imd-blue:#005DC4; --imd-light-blue:#D7EAF7; --imd-ecru:#F5F4EE; --imd-white:#FFFFFF; --sky:#9FE1FF; --orange:#FC6B27; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:"Public Sans","Helvetica Neue",Arial,sans-serif; background:var(--imd-ecru); color:var(--imd-navy); min-height:100vh; }
+  #gate { position:fixed; inset:0; background:var(--imd-navy); background-image:radial-gradient(rgba(255,255,255,0.18) 1.1px, transparent 1.1px); background-size:26px 26px; display:flex; align-items:center; justify-content:center; z-index:1000; }
+  .gate-box { text-align:center; padding:20px; }
+  .gate-box h1 { color:var(--imd-white); font-weight:700; font-size:26px; margin-bottom:18px; }
+  .gate-box input { font-family:inherit; font-size:17px; padding:13px 18px; border-radius:999px; border:none; width:280px; text-align:center; outline:none; }
+  .gate-box button { font-family:inherit; font-size:16px; font-weight:600; margin-left:10px; padding:13px 26px; border-radius:999px; border:none; background:var(--imd-blue); color:var(--imd-white); cursor:pointer; }
+  .gate-error { color:var(--orange); font-size:14px; margin-top:14px; min-height:18px; }
+
+  header { background:var(--imd-navy); color:var(--imd-white); padding:18px 28px; display:flex; align-items:center; gap:22px; flex-wrap:wrap; }
+  header .brand { font-weight:700; font-size:19px; letter-spacing:-0.01em; }
+  header .count { font-weight:300; font-size:15px; color:var(--imd-light-blue); }
+  .filters { margin-left:auto; display:flex; gap:18px; flex-wrap:wrap; align-items:baseline; }
+  .filter-btn { font-family:inherit; font-size:13px; font-weight:300; padding:4px 2px; cursor:pointer; border:none; background:transparent; color:rgba(215,234,247,0.55); border-bottom:1px solid transparent; }
+  .filter-btn:hover { color:rgba(215,234,247,0.85); }
+  .filter-btn.active { color:var(--imd-white); border-bottom-color:var(--imd-white); }
+
+  main { max-width:1150px; margin:0 auto; padding:24px 28px 50px; }
+
+  /* ---------- the live 2x2 ---------- */
+  .gridwrap { display:grid; grid-template-columns:150px 1fr 1fr; grid-template-rows:auto 1fr 1fr; gap:10px; margin-bottom:34px; }
+  .axis-x { text-align:center; font-size:12px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--imd-navy); padding-bottom:2px; }
+  .axis-x small { display:block; font-weight:300; letter-spacing:0; text-transform:none; color:#6a6f8e; font-size:12px; }
+  .axis-y { font-size:12px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:var(--imd-navy); align-self:center; }
+  .axis-y small { display:block; font-weight:300; letter-spacing:0; text-transform:none; color:#6a6f8e; font-size:12px; margin-top:3px; }
+  .q { border-radius:10px; padding:14px 16px; min-height:170px; display:flex; flex-direction:column; }
+  .q h3 { font-size:14px; font-weight:700; margin-bottom:10px; }
+  .q.replace, .q.automate { background:#EFEEE6; }
+  .q.assist { background:var(--imd-light-blue); }
+  .q.rewire { background:var(--imd-navy); color:var(--imd-white); }
+  .q.rewire h3 { color:var(--imd-white); }
+  .lane { display:flex; flex-wrap:wrap; gap:6px; align-items:center; min-height:30px; margin-bottom:8px; }
+  .lane .k { font-size:10px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#6a6f8e; width:38px; flex:none; }
+  .q.rewire .lane .k { color:rgba(255,255,255,0.6); }
+  .badge { font-size:12px; font-weight:600; padding:5px 10px; border-radius:999px; background:var(--imd-navy); color:var(--imd-white); border:2px solid var(--imd-navy); cursor:pointer; }
+  .badge.next { background:transparent; color:var(--imd-navy); border-style:dashed; }
+  .q.rewire .badge { background:var(--sky); color:var(--imd-navy); border-color:var(--sky); }
+  .q.rewire .badge.next { background:transparent; color:var(--sky); }
+  .legend { font-size:12px; color:#6a6f8e; font-weight:300; margin:-22px 0 30px; text-align:right; }
+  .legend .badge { font-size:10px; padding:2px 8px; cursor:default; margin-left:8px; }
+
+  /* ---------- list ---------- */
+  .lrow { display:grid; grid-template-columns:80px 1fr 1fr 170px 74px 40px; gap:14px; align-items:center; background:var(--imd-white); border-radius:10px; padding:14px 20px; margin-bottom:10px; box-shadow:0 2px 8px rgba(0,10,86,0.06); }
+  .lrow.head { background:transparent; box-shadow:none; padding:6px 20px; margin-bottom:4px; font-size:12px; font-weight:300; color:#6a6f8e; text-transform:uppercase; letter-spacing:0.06em; }
+  .c-tbl { font-weight:700; font-size:15px; }
+  .c-txt { font-size:14px; line-height:1.35; }
+  .c-txt .dim { color:#9a9eb5; font-weight:300; }
+  .c-move { font-size:12px; font-weight:600; color:var(--imd-blue); }
+  .c-move .arr { color:#9a9eb5; margin:0 4px; }
+  .c-show { font-family:inherit; font-size:13px; font-weight:600; padding:8px 14px; border-radius:999px; cursor:pointer; border:1.5px solid var(--imd-blue); background:transparent; color:var(--imd-blue); }
+  .c-show:hover { background:var(--imd-light-blue); }
+  .c-del { background:none; border:none; cursor:pointer; color:#b6b9c9; font-size:19px; line-height:1; font-family:inherit; padding:6px; justify-self:center; }
+  .c-del:hover { color:var(--orange); }
+  #empty { text-align:center; padding:60px 20px; font-weight:300; font-size:17px; color:#3a4066; }
+
+  /* ---------- full-screen brief ---------- */
+  #big[hidden] { display:none; }
+  #big { position:fixed; inset:0; z-index:900; background:var(--imd-navy); background-image:radial-gradient(rgba(255,255,255,0.2) 1.4px, transparent 1.4px); background-size:34px 34px; padding:5vh 7vw; overflow:auto; color:var(--imd-white); }
+  #big .close { position:absolute; top:24px; right:30px; background:none; border:2px solid rgba(255,255,255,0.4); border-radius:999px; color:rgba(255,255,255,0.75); cursor:pointer; font-family:inherit; font-size:14px; font-weight:600; padding:9px 18px; }
+  #big .close:hover { border-color:var(--imd-white); color:var(--imd-white); }
+  #big h2 { font-size:clamp(22px,2.4vw,34px); font-weight:300; color:var(--sky); margin-bottom:3vh; }
+  #big h2 b { font-weight:700; color:var(--imd-white); }
+  .bgrid { display:grid; grid-template-columns:1fr 1fr; gap:3vh 4vw; }
+  .bf { border-top:1px solid rgba(255,255,255,0.25); padding-top:1.4vh; }
+  .bf.wide { grid-column:1 / -1; }
+  .bf .l { color:var(--sky); font-size:clamp(11px,1vw,14px); font-weight:600; letter-spacing:0.09em; text-transform:uppercase; margin-bottom:0.8vh; }
+  .bf .v { font-size:clamp(18px,2.1vw,32px); line-height:1.25; font-weight:400; }
+  .bf .v .tag { display:inline-block; font-size:0.62em; font-weight:600; background:var(--sky); color:var(--imd-navy); border-radius:999px; padding:0.15em 0.7em; margin-left:0.5em; vertical-align:middle; }
+  .bf .v.empty { color:rgba(255,255,255,0.35); font-weight:300; }
+  @media (max-width:760px) { .gridwrap { grid-template-columns:1fr 1fr; } .axis-y { display:none; } .lrow { grid-template-columns:60px 1fr 64px 36px; } .c-txt.b, .c-move { display:none; } }
+</style>
+</head>
+<body>
+
+<div id="gate"><div class="gate-box"><h1>Facilitator View</h1>
+  <form id="gate-form"><input type="password" id="pw" placeholder="Password" autocomplete="off" autofocus><button type="submit">Enter</button></form>
+  <p class="gate-error" id="gate-error"></p></div></div>
+
+<header>
+  <span class="brand">IMD / AISI Facilitator View</span>
+  <span class="count" id="count"></span>
+  <div class="filters"><button class="filter-btn" id="f-today">Today only</button></div>
+</header>
+
+<main>
+  <div class="gridwrap">
+    <div></div>
+    <div class="axis-x">Substitution<small>AI does the work instead of people</small></div>
+    <div class="axis-x">Augmentation<small>AI does the work with people</small></div>
+    <div class="axis-y">Architecture<small>of the process</small></div>
+    <div class="q replace" data-q="replace"><h3>Replace the layer</h3><div class="lane" data-k="now"><span class="k">Now</span></div><div class="lane" data-k="next"><span class="k">Next</span></div></div>
+    <div class="q rewire" data-q="rewire"><h3>Rewire around the constraint</h3><div class="lane" data-k="now"><span class="k">Now</span></div><div class="lane" data-k="next"><span class="k">Next</span></div></div>
+    <div class="axis-y">A single<small>process</small></div>
+    <div class="q automate" data-q="automate"><h3>Automate the task</h3><div class="lane" data-k="now"><span class="k">Now</span></div><div class="lane" data-k="next"><span class="k">Next</span></div></div>
+    <div class="q assist" data-q="assist"><h3>Assist the task</h3><div class="lane" data-k="now"><span class="k">Now</span></div><div class="lane" data-k="next"><span class="k">Next</span></div></div>
+  </div>
+  <p class="legend">Each table appears twice: <span class="badge">now</span><span class="badge next">aiming for</span></p>
+
+  <div id="list"></div>
+  <p id="empty" hidden>No briefs yet. They appear here live as tables fill theirs in.</p>
+</main>
+
+<div id="big" hidden>
+  <button class="close" id="big-close">Back to list (Esc)</button>
+  <h2 id="big-title"></h2>
+  <div class="bgrid" id="big-grid"></div>
+</div>
+
+<script type="module">
+const PW_HASH = "e75dc098c26eac074452dad74f060301f37f51915ea769ec86ec4f842b2d3ad3";
+const COLL = window.FIREBASE_COLLECTION || "aisi_briefs";
+const LABELS = { automate:"Automate the task", assist:"Assist the task", replace:"Replace the layer", rewire:"Rewire around the constraint", substitution:"Substitution", augmentation:"Augmentation" };
+async function sha256(s) { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)); return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, "0")).join(""); }
+const gate = document.getElementById("gate");
+document.getElementById("gate-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  if ((await sha256(document.getElementById("pw").value)) === PW_HASH) { sessionStorage.setItem("fac", "1"); gate.remove(); start(); }
+  else document.getElementById("gate-error").textContent = "Wrong password.";
+});
+
+let briefs = [], todayOnly = false, started = false, db = null, fsDoc = null, fsSetDoc = null;
+const list = document.getElementById("list"), empty = document.getElementById("empty"), countEl = document.getElementById("count");
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const tableName = (b, i) => b.table || ("Brief " + (i + 1));
+
+function shown() {
+  const sod = new Date(); sod.setHours(0,0,0,0);
+  return briefs.filter((b) => !(todayOnly && (!b.ts || b.ts < sod)));
+}
+function render() {
+  const s = shown();
+  s.sort((a, b) => (a.table || "").localeCompare(b.table || "", undefined, { numeric: true }) || ((b.ts?.getTime() ?? 0) - (a.ts?.getTime() ?? 0)));
+  countEl.textContent = s.length + " brief" + (s.length === 1 ? "" : "s");
+  empty.hidden = s.length > 0;
+  // grid badges
+  document.querySelectorAll(".lane").forEach((l) => l.querySelectorAll(".badge").forEach((x) => x.remove()));
+  s.forEach((b, i) => {
+    for (const k of ["now", "next"]) {
+      if (!b[k]) continue;
+      const lane = document.querySelector('.q[data-q="' + b[k] + '"] .lane[data-k="' + k + '"]');
+      if (!lane) continue;
+      const el = document.createElement("button"); el.className = "badge" + (k === "next" ? " next" : ""); el.textContent = tableName(b, i); el.dataset.id = b.id;
+      lane.appendChild(el);
+    }
+  });
+  const head = '<div class="lrow head"><span>Table</span><span>Process</span><span>Binding constraint</span><span>Now → next</span><span></span><span></span></div>';
+  list.innerHTML = (s.length ? head : "") + s.map((b, i) =>
+    '<div class="lrow">' +
+    '<span class="c-tbl">' + esc(tableName(b, i)) + '</span>' +
+    '<span class="c-txt">' + (b.process ? esc(b.process) : '<span class="dim">—</span>') + '</span>' +
+    '<span class="c-txt b">' + (b.constraint ? esc(b.constraint) : '<span class="dim">—</span>') + '</span>' +
+    '<span class="c-move">' + esc(LABELS[b.now] || "—") + '<span class="arr">→</span>' + esc(LABELS[b.next] || "—") + '</span>' +
+    '<button class="c-show" data-id="' + esc(b.id) + '">View</button>' +
+    '<button class="c-del" data-id="' + esc(b.id) + '" title="Remove this brief">&times;</button></div>'
+  ).join("");
+}
+
+const big = document.getElementById("big");
+function openBig(b) {
+  const F = [["process","The process",1],["constraint","Its binding constraint",1],["task","The task we move",0,"mode"],["change","What we expect to change",0],
+             ["know","How we will know",0],["notyet","What we will not automate yet",0],["now","Our quadrant now",0,null,true],["next","The quadrant we are aiming for",0,null,true,"next_true"]];
+  document.getElementById("big-title").innerHTML = "Rewire brief <b>" + esc(b.table || "") + "</b>";
+  document.getElementById("big-grid").innerHTML = F.map(([k, l, wide, tag, isQ, extra]) => {
+    let v = isQ ? (LABELS[b[k]] || "") : (b[k] || "");
+    let html = v ? esc(v) : '<span class="empty">—</span>';
+    if (tag && b[tag]) html += '<span class="tag">' + esc(LABELS[b[tag]]) + "</span>";
+    if (extra && b[extra]) html += '<div style="font-size:0.75em;opacity:0.85;margin-top:0.4em">' + esc(b[extra]) + "</div>";
+    return '<div class="bf' + (wide ? " wide" : "") + '"><div class="l">' + l + '</div><div class="v' + (v ? "" : " empty") + '">' + html + "</div></div>";
+  }).join("");
+  big.hidden = false;
+}
+function closeBig() { big.hidden = true; }
+document.getElementById("big-close").addEventListener("click", closeBig);
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeBig(); });
+document.addEventListener("click", async (e) => {
+  const show = e.target.closest(".c-show, .badge[data-id]");
+  if (show) { const b = briefs.find((x) => x.id === show.dataset.id); if (b) openBig(b); return; }
+  const del = e.target.closest(".c-del");
+  if (del && db) { if (!confirm("Remove this brief from the view?")) return; await fsSetDoc(fsDoc(db, COLL, del.dataset.id), { hidden: true }, { merge: true }); }
+});
+document.getElementById("f-today").addEventListener("click", (e) => { todayOnly = !todayOnly; e.target.classList.toggle("active", todayOnly); render(); });
+
+async function start() {
+  if (started) return; started = true;
+  if (!window.FIREBASE_CONFIG) { empty.hidden = false; empty.textContent = "Firebase is not configured yet. Fill in firebase-config.js to start collecting briefs."; return; }
+  const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js");
+  const { getFirestore, collection, query, orderBy, onSnapshot, doc, setDoc } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+  db = getFirestore(initializeApp(window.FIREBASE_CONFIG)); fsDoc = doc; fsSetDoc = setDoc;
+  onSnapshot(query(collection(db, COLL), orderBy("ts", "desc")), (snap) => {
+    briefs = snap.docs.filter((d) => !d.data().hidden).map((d) => { const v = d.data(); return { id: d.id, ...v, ts: v.ts && v.ts.toDate ? v.ts.toDate() : null }; });
+    render();
+  }, (err) => {
+    empty.hidden = false;
+    empty.textContent = err.code === "permission-denied"
+      ? "Firestore rules do not yet allow the '" + COLL + "' collection. Add the rule from firebase-config.js in the Firebase console."
+      : "Could not load briefs: " + err.message;
+  });
+}
+if (sessionStorage.getItem("fac") === "1") { gate.remove(); start(); }
+</script>
+</body>
+</html>
