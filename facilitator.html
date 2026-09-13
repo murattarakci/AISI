@@ -10,56 +10,65 @@
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
 <script src="firebase-config.js"></script>
 <style>
-  :root { --imd-navy:#000A56; --imd-blue:#005DC4; --imd-light-blue:#D7EAF7; --imd-ecru:#F5F4EE; --imd-white:#FFFFFF; --sky:#9FE1FF; --orange:#FC6B27; }
+  :root { --navy:#000A56; --blue:#005DC4; --ltblue:#D7EAF7; --ecru:#F5F4EE; --white:#FFFFFF; --sky:#9FE1FF; --orange:#FC6B27; }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:"Public Sans","Helvetica Neue",Arial,sans-serif; background:var(--imd-ecru); color:var(--imd-navy); min-height:100vh; }
-  #gate { position:fixed; inset:0; background:var(--imd-navy); background-image:radial-gradient(rgba(255,255,255,0.18) 1.1px, transparent 1.1px); background-size:26px 26px; display:flex; align-items:center; justify-content:center; z-index:1000; }
+  body { font-family:"Public Sans","Helvetica Neue",Arial,sans-serif; background:var(--ecru); color:var(--navy); min-height:100vh; }
+  #gate { position:fixed; inset:0; background:var(--navy); background-image:radial-gradient(rgba(255,255,255,0.18) 1.1px, transparent 1.1px); background-size:26px 26px; display:flex; align-items:center; justify-content:center; z-index:1000; }
   .gate-box { text-align:center; padding:20px; }
-  .gate-box h1 { color:var(--imd-white); font-weight:700; font-size:26px; margin-bottom:18px; }
+  .gate-box h1 { color:var(--white); font-weight:700; font-size:26px; margin-bottom:18px; }
   .gate-box input { font-family:inherit; font-size:17px; padding:13px 18px; border-radius:999px; border:none; width:280px; text-align:center; outline:none; }
-  .gate-box button { font-family:inherit; font-size:16px; font-weight:600; margin-left:10px; padding:13px 26px; border-radius:999px; border:none; background:var(--imd-blue); color:var(--imd-white); cursor:pointer; }
+  .gate-box button { font-family:inherit; font-size:16px; font-weight:600; margin-left:10px; padding:13px 26px; border-radius:999px; border:none; background:var(--blue); color:var(--white); cursor:pointer; }
   .gate-error { color:var(--orange); font-size:14px; margin-top:14px; min-height:18px; }
 
-  header { background:var(--imd-navy); color:var(--imd-white); padding:18px 28px; display:flex; align-items:center; gap:22px; flex-wrap:wrap; }
+  header { background:var(--navy); color:var(--white); padding:18px 28px; display:flex; align-items:center; gap:22px; flex-wrap:wrap; }
   header .brand { font-weight:700; font-size:19px; letter-spacing:-0.01em; }
-  header .count { font-weight:300; font-size:15px; color:var(--imd-light-blue); }
+  header .count { font-weight:300; font-size:15px; color:var(--ltblue); }
   .filters { margin-left:auto; display:flex; gap:18px; flex-wrap:wrap; align-items:baseline; }
   .filter-btn { font-family:inherit; font-size:13px; font-weight:300; padding:4px 2px; cursor:pointer; border:none; background:transparent; color:rgba(215,234,247,0.55); border-bottom:1px solid transparent; }
   .filter-btn:hover { color:rgba(215,234,247,0.85); }
-  .filter-btn.active { color:var(--imd-white); border-bottom-color:var(--imd-white); }
+  .filter-btn.active { color:var(--white); border-bottom-color:var(--white); }
 
   #list { padding:20px 28px 50px; max-width:1150px; margin:0 auto; }
-  .lrow { display:grid; grid-template-columns:1fr 82px 130px 74px 40px; gap:14px; align-items:center; background:var(--imd-white); border-radius:10px; padding:16px 20px; margin-bottom:10px; box-shadow:0 2px 8px rgba(0,10,86,0.06); }
+  .lrow { display:grid; grid-template-columns:1fr 220px 82px 130px 74px 40px; gap:14px; align-items:center; background:var(--white); border-radius:10px; padding:16px 20px; margin-bottom:10px; box-shadow:0 2px 8px rgba(0,10,86,0.06); }
   .lrow.head { background:transparent; box-shadow:none; padding:6px 20px; margin-bottom:4px; font-size:12px; font-weight:300; color:#6a6f8e; text-transform:uppercase; letter-spacing:0.06em; }
   .lrow.flagged { opacity:0.45; }
-  .c-card .stmt { font-weight:600; font-size:17px; line-height:1.3; letter-spacing:-0.01em; }
-  .c-card .stmt .fill { color:var(--imd-blue); }
+  .c-card .stmt { font-weight:600; font-size:16px; line-height:1.3; letter-spacing:-0.01em; }
+  .c-card .stmt .fill { color:var(--blue); }
   .c-card .sub { font-weight:300; font-size:13px; color:#6a6f8e; margin-top:3px; }
   .c-card .flag-note { font-weight:600; font-size:11px; color:var(--orange); margin-top:3px; text-transform:uppercase; letter-spacing:0.05em; }
+  .c-progress { font-size:12px; color:#6a6f8e; line-height:1.5; }
   .c-score { font-weight:600; font-size:15px; text-align:center; }
   .c-score.dim { color:#b6b9c9; font-weight:300; }
   .c-date { font-weight:300; font-size:13px; color:#6a6f8e; text-align:center; }
-  .c-show { font-family:inherit; font-size:13px; font-weight:600; padding:8px 14px; border-radius:999px; cursor:pointer; border:1.5px solid var(--imd-blue); background:transparent; color:var(--imd-blue); }
-  .c-show:hover { background:var(--imd-light-blue); }
+  .c-show { font-family:inherit; font-size:13px; font-weight:600; padding:8px 14px; border-radius:999px; cursor:pointer; border:1.5px solid var(--blue); background:transparent; color:var(--blue); }
+  .c-show:hover { background:var(--ltblue); }
   .c-del { background:none; border:none; cursor:pointer; color:#b6b9c9; font-size:19px; line-height:1; font-family:inherit; padding:6px; justify-self:center; }
   .c-del:hover { color:var(--orange); }
   #empty { text-align:center; padding:80px 20px; font-weight:300; font-size:17px; color:#3a4066; }
 
   #big[hidden] { display:none; }
-  #big { position:fixed; inset:0; z-index:900; background:var(--imd-navy); background-image:radial-gradient(rgba(255,255,255,0.2) 1.4px, transparent 1.4px); background-size:34px 34px; display:flex; flex-direction:column; justify-content:center; padding:6vw 8vw; overflow:auto; }
-  #big .stmt { color:var(--imd-white); font-weight:600; font-size:clamp(28px,4.6vw,68px); line-height:1.18; letter-spacing:-0.01em; }
+  #big { position:fixed; inset:0; z-index:900; background:var(--navy); background-image:radial-gradient(rgba(255,255,255,0.2) 1.4px, transparent 1.4px); background-size:34px 34px; padding:5vh 7vw; overflow:auto; color:var(--white); }
+  #big .close { position:absolute; top:24px; right:30px; background:none; border:2px solid rgba(255,255,255,0.4); border-radius:999px; color:rgba(255,255,255,0.75); cursor:pointer; font-family:inherit; font-size:14px; font-weight:600; padding:9px 18px; }
+  #big .close:hover { border-color:var(--white); color:var(--white); }
+  #big h2 { font-size:clamp(15px,1.4vw,19px); font-weight:300; color:var(--sky); margin-bottom:1.5vh; text-transform:uppercase; letter-spacing:0.06em; }
+  #big .stmt { font-size:clamp(24px,3.6vw,54px); font-weight:600; line-height:1.2; letter-spacing:-0.01em; margin-bottom:4vh; }
   #big .stmt .fill { color:var(--sky); }
-  #big .sub { color:rgba(255,255,255,0.8); font-weight:300; font-size:clamp(15px,1.6vw,22px); margin-top:2.5vh; }
-  #big .detail { margin-top:5vh; display:grid; grid-template-columns:1fr 1fr; gap:2.5vh 4vw; max-width:1100px; }
+  #big .detail { display:grid; grid-template-columns:1fr 1fr; gap:2.5vh 4vw; max-width:1100px; }
   #big .df { border-top:1px solid rgba(255,255,255,0.22); padding-top:1.2vh; }
   #big .df.wide { grid-column:1 / -1; }
   #big .df .l { color:var(--sky); font-size:clamp(10px,0.9vw,13px); font-weight:600; letter-spacing:0.09em; text-transform:uppercase; margin-bottom:0.6vh; }
-  #big .df .v { color:var(--imd-white); font-size:clamp(14px,1.5vw,19px); line-height:1.3; }
+  #big .df .v { font-size:clamp(14px,1.5vw,19px); line-height:1.4; }
   #big .df .v.empty { color:rgba(255,255,255,0.35); }
-  #big .close { position:absolute; top:24px; right:30px; background:none; border:2px solid rgba(255,255,255,0.4); border-radius:999px; color:rgba(255,255,255,0.75); cursor:pointer; font-family:inherit; font-size:14px; font-weight:600; padding:9px 18px; }
-  #big .close:hover { border-color:var(--imd-white); color:var(--imd-white); }
+  #big .chiprow { display:flex; flex-wrap:wrap; gap:6px; margin-top:0.4vh; }
+  #big .mchip { font-size:clamp(11px,1vw,14px); padding:5px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.35); }
+  #big .mchip.ai { background:var(--blue); border-color:var(--blue); }
+  #big .mchip.assist { background:rgba(215,234,247,0.25); }
+  #big .cchip2 { font-size:clamp(11px,1vw,14px); padding:5px 14px; border-radius:999px; border:1px solid rgba(255,255,255,0.35); }
+  #big .cchip2.endures { background:rgba(215,234,247,0.25); }
+  #big .cchip2.emerges { background:var(--sky); color:var(--navy); border-color:var(--sky); }
 
-  @media (max-width:760px) { .lrow { grid-template-columns:1fr 60px 64px 36px; } .c-date { display:none; } #big .detail { grid-template-columns:1fr; } }
+  @media (max-width:900px) { .lrow { grid-template-columns:1fr 60px 64px 36px; } .c-date, .c-progress { display:none; } }
+  @media (max-width:760px) { #big .detail { grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
@@ -75,19 +84,18 @@
 </header>
 
 <div id="list"></div>
-<p id="empty" hidden>No briefs yet. They appear here live as tables fill theirs in, sorted by the sharpest "not / but" contrast.</p>
+<p id="empty" hidden>No briefs yet. They appear here live as tables work through the tool, sorted by the sharpest "not / but" contrast.</p>
 
 <div id="big" hidden>
   <button class="close" id="big-close">Back to list (Esc)</button>
+  <h2 id="big-h2"></h2>
   <p class="stmt" id="big-stmt"></p>
-  <p class="sub" id="big-sub"></p>
   <div class="detail" id="big-detail"></div>
 </div>
 
 <script type="module">
 const PW_HASH = "549c7fee864542f5de2f19293bd6ca2236c5e38588b3983508055d2e9dfbfbc3";
 const COLL = window.FIREBASE_COLLECTION || "aisi_briefs";
-const LABELS = { substitution:"Substitution", augmentation:"Augmentation" };
 
 async function sha256(s) { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)); return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, "0")).join(""); }
 const gate = document.getElementById("gate");
@@ -100,8 +108,8 @@ document.getElementById("gate-form").addEventListener("submit", async (e) => {
 let briefs = [], todayOnly = false, started = false, db = null, fsDoc = null, fsSetDoc = null;
 const list = document.getElementById("list"), empty = document.getElementById("empty"), countEl = document.getElementById("count");
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const arr = (a) => Array.isArray(a) ? a : [];
 
-/* ---------- contrast scoring: in-browser MiniLM embeddings, same approach as LTAIS ---------- */
 let extractor = null;
 const scoreCache = new Map();
 async function ensureModel() {
@@ -119,7 +127,7 @@ async function contrastScore(b1, b2) {
   ]);
   let dot = 0;
   for (let i = 0; i < e1.data.length; i++) dot += e1.data[i] * e2.data[i];
-  const score = (1 - dot) / 2; // 0 = same meaning, 1 = maximal contrast
+  const score = (1 - dot) / 2;
   scoreCache.set(key, score);
   return score;
 }
@@ -128,14 +136,16 @@ async function scoreAll() {
   for (const b of briefs) if (b.rewire_not && b.rewire_but) b.score = await contrastScore(b.rewire_not, b.rewire_but);
 }
 
-/* ---------- profanity check: flagged briefs sink to the bottom ---------- */
 const PROFANITY = /\b(fuck\w*|shit\w*|bitch\w*|cunt\w*|asshole\w*|arsehole\w*|bastard\w*|dickhead\w*|wanker\w*|slut\w*|whore\w*|nigg\w+|fag\w*|retard\w*|piss\w*|bollocks|bullshit|motherfuck\w*|cock\w*|twat\w*)\b/i;
-function isFlagged(b) { return PROFANITY.test([b.rewire_not, b.rewire_but, b.table, b.process, b.constraint].join(" ")); }
+function isFlagged(b) { return PROFANITY.test([b.rewire_not, b.rewire_but, b.processName, ...arr(b.tasks).map((t)=>t.label), ...arr(b.constraints).map((c)=>c.label)].join(" ")); }
 
 function stmtHTML(b) {
   const n = b.rewire_not ? '<span class="fill">' + esc(b.rewire_not) + "</span>" : "____";
   const t = b.rewire_but ? '<span class="fill">' + esc(b.rewire_but) + "</span>" : "____";
   return "Our rewire is not " + n + ", but " + t + ".";
+}
+function progressLine(b) {
+  return arr(b.tasks).length + " tasks &middot; " + arr(b.constraints).length + " constraints &middot; " + arr(b.rebundle).length + " rebundled";
 }
 
 function render() {
@@ -149,16 +159,18 @@ function render() {
   });
   countEl.textContent = shown.length + " brief" + (shown.length === 1 ? "" : "s");
   empty.hidden = shown.length > 0;
-  const head = '<div class="lrow head"><span>Brief</span><span style="text-align:center">Contrast</span><span style="text-align:center">Entered</span><span></span><span></span></div>';
+  const head = '<div class="lrow head"><span>Brief</span><span>Progress</span><span style="text-align:center">Contrast</span><span style="text-align:center">Entered</span><span></span><span></span></div>';
   list.innerHTML = (shown.length ? head : "") + shown.map((b) => {
     const score = b.score != null ? '<span class="c-score">' + Math.round(b.score * 100) + "</span>" : '<span class="c-score dim">&ndash;</span>';
     const when = b.ts ? b.ts.toLocaleString([], { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }) : "&ndash;";
     return (
       '<div class="lrow' + (b.flagged ? " flagged" : "") + '">' +
       '<div class="c-card"><p class="stmt">' + stmtHTML(b) + "</p>" +
-      (b.table || b.process ? '<p class="sub">' + [b.table, b.process].filter(Boolean).map(esc).join(" — ") + "</p>" : "") +
+      (b.processName ? '<p class="sub">' + esc(b.processName) + "</p>" : "") +
       (b.flagged ? '<p class="flag-note">Flagged: possible profanity</p>' : "") +
-      "</div>" + score +
+      "</div>" +
+      '<span class="c-progress">' + progressLine(b) + "</span>" +
+      score +
       '<span class="c-date">' + when + "</span>" +
       '<button class="c-show" data-id="' + esc(b.id) + '">View</button>' +
       '<button class="c-del" data-id="' + esc(b.id) + '" title="Remove this brief">&times;</button></div>'
@@ -168,14 +180,26 @@ function render() {
 
 const big = document.getElementById("big");
 function openBig(b) {
+  document.getElementById("big-h2").textContent = b.processName || "Untitled process";
   document.getElementById("big-stmt").innerHTML = stmtHTML(b);
-  document.getElementById("big-sub").innerHTML = [b.table, b.process].filter(Boolean).map(esc).join(" &mdash; ");
-  const F = [["constraint","Its binding constraint",1],["task","The task we move",0],["change","What we expect to change",0],
-             ["know","How we will know",0],["notyet","What we will not automate yet",0]];
-  document.getElementById("big-detail").innerHTML = F.map(([k, l, wide]) => {
-    let v = b[k] || "";
-    if (k === "task" && b.mode) v = (v ? v + " " : "") + "(" + (LABELS[b.mode] || b.mode) + ")";
-    return '<div class="df' + (wide ? " wide" : "") + '"><div class="l">' + l + '</div><div class="v' + (v ? "" : " empty") + '">' + (v ? esc(v) : "—") + "</div></div>";
+  const taskChips = arr(b.tasks).map((t) => '<span class="mchip ' + esc(t.status||'human') + '">' + esc(t.label) + '</span>').join("");
+  const constrChips = arr(b.constraints).map((c) => {
+    const linked = arr(c.taskIds).map((id) => { const t = arr(b.tasks).find((x) => x.id === id); return t ? t.label : null; }).filter(Boolean);
+    return '<span class="cchip2 ' + esc(c.kind||'eroded') + '" title="' + (linked.length ? "under: " + esc(linked.join(", ")) : "not linked") + '">' + esc(c.label) + "</span>";
+  }).join("");
+  const rebChips = arr(b.rebundle).map((t) => '<span class="mchip ' + esc(t.status||'human') + '">' + esc(t.label) + '</span>').join("");
+  const F = [
+    ["Tasks (unbundled)", taskChips || '<span class="v empty">none yet</span>', 1],
+    ["Constraints", constrChips || '<span class="v empty">none yet</span>', 1],
+    ["Rebundled into", rebChips || '<span class="v empty">none yet</span>', 1],
+    ["What we expect to change", b.change ? esc(b.change) : "", 0],
+    ["How we will know", b.know ? esc(b.know) : "", 0],
+    ["What we will not automate yet", b.notyet ? esc(b.notyet) : "", 0]
+  ];
+  document.getElementById("big-detail").innerHTML = F.map(([l, v, wide]) => {
+    const isChips = typeof v === "string" && v.includes("chip");
+    return '<div class="df' + (wide ? " wide" : "") + '"><div class="l">' + l + '</div><div class="v' + (v ? "" : " empty") + '">' +
+      (isChips ? '<div class="chiprow">' + v + "</div>" : (v || "&mdash;")) + "</div></div>";
   }).join("");
   big.hidden = false;
 }
