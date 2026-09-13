@@ -120,7 +120,7 @@
 </div>
 
 <script type="module">
-const PW_HASH = "e75dc098c26eac074452dad74f060301f37f51915ea769ec86ec4f842b2d3ad3";
+const PW_HASH = "549c7fee864542f5de2f19293bd6ca2236c5e38588b3983508055d2e9dfbfbc3";
 const COLL = window.FIREBASE_COLLECTION || "aisi_briefs";
 const LABELS = { automate:"Automate the task", assist:"Assist the task", replace:"Replace the layer", rewire:"Rewire around the constraint", substitution:"Substitution", augmentation:"Augmentation" };
 async function sha256(s) { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)); return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, "0")).join(""); }
