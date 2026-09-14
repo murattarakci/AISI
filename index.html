@@ -6,8 +6,8 @@
 <title>Rewire Your Process | IMD AI Strategy and Implementation</title>
 <meta name="description" content="Unbundle a process into tasks, find its binding constraints, rebundle it, then state what your rewire is not, but is.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Rewire Your Process — IMD AI Strategy and Implementation">
-<meta property="og:description" content="Our rewire is not ___, but ___. Part of IMD's AI Strategy and Implementation programme.">
+<meta property="og:title" content="Rewire Your Process: IMD AI Strategy and Implementation">
+<meta property="og:description" content="Our process is not ___, but ___. Part of IMD's AI Strategy and Implementation programme.">
 <meta property="og:url" content="https://murattarakci.github.io/AISI/">
 <meta property="og:image" content="https://murattarakci.github.io/AISI/assets/og-card.png">
 <meta property="og:image:width" content="1200">
@@ -59,7 +59,7 @@
 
   /* task chip */
   .chip { position:relative; display:flex; align-items:center; gap:6px; padding:9px 16px; border-radius:10px; border:1.5px solid var(--blue);
-    background:var(--white); color:var(--navy); cursor:pointer; user-select:none; font-size:14px; font-weight:500; touch-action:none; }
+    background:var(--white); color:var(--navy); cursor:pointer; user-select:none; font-size:14px; font-weight:500; }
   .chip[data-status="assist"] { background:var(--ltblue); }
   .chip[data-status="ai"] { background:var(--blue); color:var(--white); border-color:var(--blue); }
   .chip .lbl { outline:none; }
@@ -67,8 +67,6 @@
   .chip .del { display:none; position:absolute; top:-8px; right:-8px; width:19px; height:19px; border-radius:50%; background:var(--navy); color:var(--white);
     border:none; font-size:13px; line-height:1; cursor:pointer; align-items:center; justify-content:center; }
   .chip:hover .del { display:flex; }
-  .chip.dragging { opacity:0.35; }
-  .chip.merge-target { box-shadow:0 0 0 3px var(--sky); }
   .chip.selected { box-shadow:0 0 0 3px #FC6B27; }
   .chip .arrows { display:none; position:absolute; bottom:-11px; left:50%; transform:translateX(-50%); gap:2px; }
   .chip:hover .arrows { display:flex; }
@@ -85,13 +83,13 @@
   .mode-hint { font-size:12.5px; color:#8a8fa8; }
 
   /* constraint chip (hexagon) */
-  .cchip { position:relative; padding:10px 26px; clip-path:polygon(7% 0%,93% 0%,100% 50%,93% 100%,7% 100%,0% 50%);
-    background:var(--ecru); color:var(--grey); cursor:pointer; user-select:none; font-size:13.5px; font-weight:600; min-width:120px; text-align:center; }
+  .cchip { position:relative; padding:10px 34px 10px 26px; clip-path:polygon(7% 0%,93% 0%,100% 50%,93% 100%,7% 100%,0% 50%);
+    background:var(--ecru); color:var(--grey); cursor:pointer; user-select:none; font-size:13.5px; font-weight:600; min-width:130px; text-align:center; }
   .cchip[data-kind="endures"] { background:var(--ltblue); color:var(--navy); }
   .cchip[data-kind="emerges"] { background:var(--navy); color:var(--white); }
   .cchip .lbl[contenteditable="true"] { background:rgba(255,255,255,0.3); border-radius:4px; }
-  .cchip .del { display:none; position:absolute; top:-6px; right:6px; width:19px; height:19px; border-radius:50%; background:var(--navy); color:var(--white);
-    border:none; font-size:13px; line-height:1; cursor:pointer; align-items:center; justify-content:center; }
+  .cchip .del { display:none; position:absolute; top:6px; right:12px; width:17px; height:17px; border-radius:50%; background:var(--navy); color:var(--white);
+    border:none; font-size:12px; line-height:1; cursor:pointer; align-items:center; justify-content:center; z-index:2; }
   .cchip:hover .del { display:flex; }
   .cchip .kind-tag { display:block; font-size:9px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; opacity:0.65; margin-bottom:2px; }
   .cchip .link-btn { display:inline-flex; align-items:center; gap:4px; margin-top:5px; font-size:10.5px; font-weight:700; letter-spacing:0.03em;
@@ -177,9 +175,9 @@
 
   <section class="screen" id="screen-1" hidden>
     <h1 class="q">Unbundle it into tasks</h1>
-    <p class="hint">Type a task and press Enter, or paste a list separated by commas or semicolons. <strong>Click</strong> a task to set who does it. <strong>Double-click</strong> to rename. <strong>Drag</strong> to reorder.</p>
+    <p class="hint">Type a task and press Enter, or paste a list separated by commas or semicolons. <strong>Click</strong> a task to set who does it. <strong>Double-click</strong> to rename. Use the arrows to reorder.</p>
     <div class="addbar"><input id="taskInput" placeholder="Add a task…"><button id="taskAdd">Add</button>
-      <span class="note">Enter adds one · a comma or semicolon list adds several at once · use the ◀ ▶ arrows on a chip to reorder, or drag it</span></div>
+      <span class="note">Enter adds one. A comma or semicolon list adds several at once. Use the arrows on a chip to reorder.</span></div>
     <div class="legend">
       <span><span class="sw" style="background:#fff;border:1.5px solid #005DC4"></span>Human</span>
       <span><span class="sw" style="background:#D7EAF7"></span>AI assists</span>
@@ -190,7 +188,7 @@
 
   <section class="screen" id="screen-2" hidden>
     <h1 class="q">Find the constraints</h1>
-    <p class="hint">A constraint is not a task — it's what limits the value this process can create. Add one below, then press <strong>Link</strong> and click the task(s) it sits under.</p>
+    <p class="hint">A constraint is not a task. It is what limits the value this process can create. Add one below, then press <strong>Link</strong> and click the task(s) it sits under.</p>
     <div class="lane-label">The tasks (for reference)</div>
     <div class="lane empty" id="taskLane2"></div>
     <p class="link-banner" id="linkBanner">Linking mode: click the tasks above that this constraint sits under. Click <b>Link</b> again to finish.</p>
@@ -207,18 +205,18 @@
 
   <section class="screen" id="screen-3" hidden>
     <h1 class="q">Rebundle</h1>
-    <p class="hint">Your original tasks are frozen below for reference. Build the new arrangement above them: drag a task onto another to <strong>merge</strong> them into one role, add new tasks for what's emerging, delete what's gone.</p>
-    <div class="lane-label">After — your rebundled process</div>
+    <p class="hint">Your original tasks are frozen below for reference. Build the new arrangement above them. Select two or more tasks and press <strong>Merge</strong> to combine them into one role. Add new tasks for what is emerging. Delete what is gone.</p>
+    <div class="lane-label">After: your rebundled process</div>
     <button class="copy-btn" id="copyBefore">Copy tasks from before to start</button>
     <div class="addbar"><input id="rebInput" placeholder="Add a new task or role…"><button id="rebAdd">Add</button></div>
     <div class="mode-row">
       <button class="mode-btn" id="mergeMode">Select to merge</button>
       <button class="merge-go" id="mergeGo">Merge selected →</button>
-      <span class="mode-hint" id="modeHint">Or use the ◀ ▶ arrows on a chip to reorder, and drag if you prefer.</span>
+      <span class="mode-hint" id="modeHint">Use the arrows on a chip to reorder.</span>
     </div>
     <div class="lane empty" id="rebLane"></div>
     <p class="counter" id="counter"></p>
-    <div class="lane-label">Before — your original tasks (frozen)</div>
+    <div class="lane-label">Before: your original tasks (frozen)</div>
     <div class="lane empty before-wrap" id="beforeLane"></div>
   </section>
 
@@ -228,7 +226,7 @@
     <div class="card-wrap">
       <div id="card">
         <div class="card-top">
-          <div class="card-logo" aria-label="IMD — Real learning, real impact"><svg viewBox="0 0 1920 298.9" xmlns="http://www.w3.org/2000/svg" fill="#FFFFFF">
+          <div class="card-logo" aria-label="IMD, real learning, real impact"><svg viewBox="0 0 1920 298.9" xmlns="http://www.w3.org/2000/svg" fill="#FFFFFF">
         <path d="M13.9 0 8.1 14.3C41.1 14.3 49.6 37.8 49.6 62L49.6 214.4C49.6 238.7 38.9 262.1 5.9 262.1L-0.1 276.4 144.5 276.4 150.3 262.1C117.3 262.1 108.8 238.6 108.8 214.4L108.8 62.1C108.8 37.8 119.5 14.4 152.5 14.4L158.4 0 13.9 0ZM609.1 0 603.2 14.6C656 22.2 684.2 63.6 684.2 126.9 684.2 213.2 627.8 254.2 567 254.2L537.6 254.2 537.6 62.1C537.6 37.8 548.3 14.4 581.3 14.4L587 0 457.3 0 386.2 180.6 315.9 0 180.4 0 174.5 14.3C207.5 14.3 216.2 37.8 216.2 62L216.2 214.4C216.2 238.7 205.5 262.1 172.5 262.1L166.7 276.4 311.2 276.4 316.8 262.1C283.8 262.1 275.4 238.6 275.4 214.4L275.4 48.5 367.2 276.5 383.9 276.5 478.5 41.4 478.5 214.5C478.5 238.8 465.5 262.2 432.5 262.2L426.9 276.5 572.3 276.5C674.4 276.5 754.7 229.2 754.7 132.9 754.6 55.7 702.5 0 610.7 0L609.1 0Z"/>
         <path d="M943.2 0.2 966.1 0.2 854.9 276.5 831.9 276.5Z"/>
         <path d="M1826.5 197 1809.1 197 1809.1 174.3 1797.5 174.3 1793.5 197.1 1780.4 197.1 1780.4 208.7 1793 208.7 1793 255.6C1793 259.8 1793.6 263.3 1794.8 266.2 1796 269.1 1798.2 271.4 1801.4 272.9 1804.6 274.5 1809 275.2 1814.8 275.2 1817.9 275.2 1820.4 275.1 1822.4 274.7 1824.4 274.4 1825.9 274.1 1826.9 273.7L1826.9 263.3 1817.8 263.3C1815.6 263.3 1813.9 263.1 1812.6 262.8 1811.3 262.5 1810.4 261.7 1809.9 260.5 1809.4 259.3 1809.1 257.5 1809.1 254.9L1809 208.6 1826.4 208.6 1826.4 197ZM1721.5 200.7C1716.1 204.1 1711.9 208.9 1709.1 215 1706.3 221.1 1704.8 228.2 1704.8 236.2 1704.8 244.8 1706.3 252 1709.4 258 1712.5 264 1716.7 268.5 1722.2 271.6 1727.6 274.7 1733.9 276.2 1741 276.2 1746.7 276.2 1751.8 275.1 1756.3 272.9 1760.8 270.7 1764.5 267.6 1767.3 263.7 1770.1 259.8 1771.8 255.2 1772.4 250L1758.7 250C1758.3 252.4 1757.4 254.6 1755.9 256.8 1754.4 259 1752.5 260.8 1750 262.2 1747.5 263.6 1744.6 264.3 1741.3 264.3 1734.3 264.3 1729.1 261.7 1725.4 256.6 1721.8 251.5 1720 244.6 1720 236 1720 226.6 1722 219.6 1725.9 215.1 1729.8 210.6 1734.9 208.3 1741.1 208.3 1744.5 208.3 1747.4 209 1749.9 210.3 1752.4 211.6 1754.4 213.4 1755.8 215.6 1757.3 217.8 1758.2 220.2 1758.7 222.7L1772.6 222.7C1772 217.3 1770.3 212.6 1767.5 208.5 1764.7 204.4 1761 201.3 1756.5 199 1752 196.7 1746.8 195.6 1741 195.6 1733.4 195.6 1726.9 197.3 1721.5 200.7M1643.1 261.5C1640.2 259.2 1638.7 255.9 1638.7 251.8 1638.7 248.2 1639.7 245.2 1641.7 243 1643.7 240.8 1646.5 239.2 1650.3 238.1 1654 237.1 1658.6 236.5 1663.9 236.4L1674.4 236.2 1674.4 249C1674.4 251 1673.7 253 1672.6 254.9 1671.4 256.8 1669.9 258.5 1667.9 260 1666 261.5 1663.8 262.7 1661.4 263.6 1659 264.5 1656.6 264.9 1654.1 264.9 1649.7 265 1646 263.8 1643.1 261.5M1664 272.8C1668.4 270.5 1672.1 266.4 1675 260.5L1676.3 274.8 1689.9 274.8 1689.9 220.6C1689.9 215.3 1688.8 210.8 1686.6 207.1 1684.4 203.4 1681 200.6 1676.4 198.7 1671.9 196.8 1666 195.8 1659 195.8 1652.6 195.8 1647.1 196.7 1642.4 198.5 1637.7 200.3 1634 203 1631.3 206.5 1628.6 210 1627.1 214.4 1626.8 219.5L1640.8 219.5C1641.8 215.1 1643.9 212 1647.1 210.1 1650.3 208.2 1654 207.3 1658.2 207.3 1663.7 207.3 1667.8 208.5 1670.4 211 1673 213.6 1674.4 217.1 1674.4 221.5L1674.4 227.1 1661.6 227.5C1648.2 227.8 1638.5 230 1632.4 234.3 1626.3 238.6 1623.2 245 1623.2 253.6 1623.2 258.4 1624.3 262.5 1626.5 265.9 1628.7 269.3 1631.7 271.9 1635.6 273.7 1639.5 275.5 1643.9 276.4 1648.9 276.4 1654.6 276.2 1659.6 275 1664 272.8M1566.9 260C1563.8 257.4 1561.6 253.9 1560 249.6 1558.5 245.3 1557.7 240.5 1557.7 235.2 1557.7 227.2 1559.4 220.6 1562.9 215.4 1566.4 210.3 1571.5 207.7 1578.2 207.7 1584.8 207.7 1589.8 210.2 1593.3 215.1 1596.8 220 1598.6 226.7 1598.6 235.2 1598.6 245.1 1596.7 252.3 1592.9 256.9 1589.1 261.5 1584.2 263.8 1578.2 263.8 1573.7 263.9 1569.9 262.6 1566.9 260M1557.8 298.8 1557.8 261.3C1558.7 263 1559.8 264.7 1561.2 266.4 1562.6 268.1 1564.2 269.7 1566.2 271.2 1568.1 272.7 1570.4 273.9 1573 274.8 1575.6 275.7 1578.4 276.2 1581.6 276.2 1588.2 276.2 1594 274.6 1598.9 271.5 1603.7 268.4 1607.5 263.8 1610.1 257.7 1612.7 251.6 1614 244 1614 235 1614 226.1 1612.7 218.7 1610.1 212.8 1607.5 207 1603.8 202.6 1599.1 199.8 1594.4 197 1589 195.6 1582.9 195.6 1579.6 195.6 1576.7 196 1574 196.9 1571.3 197.8 1568.9 198.9 1566.9 200.3 1564.8 201.7 1563 203.3 1561.5 204.9 1560 206.6 1558.8 208.3 1557.8 210L1557.7 197.1 1541.6 197.1 1541.6 298.8 1557.8 298.8ZM1429.7 274.7 1429.7 223.5C1429.7 220.2 1430.5 217.4 1432.2 215.3 1433.9 213.2 1436 211.6 1438.5 210.6 1441 209.6 1443.5 209.1 1446 209.1 1448.2 209.1 1450.5 209.6 1452.8 210.6 1455.1 211.6 1457 213 1458.5 215 1460 216.9 1460.8 219.4 1460.8 222.2L1460.8 274.8 1476.9 274.8 1476.9 223.6C1476.9 220 1477.8 217.2 1479.5 215 1481.3 212.9 1483.4 211.4 1485.9 210.5 1488.4 209.6 1490.8 209.1 1493.1 209.1 1495.7 209.1 1498.1 209.6 1500.3 210.6 1502.6 211.6 1504.4 213.3 1505.9 215.7 1507.3 218.1 1508 221.4 1508 225.7L1508 274.8 1524.1 274.8 1524.1 223.9C1524.1 218.3 1523.3 213.7 1521.7 210 1520.1 206.4 1518.1 203.5 1515.5 201.4 1513 199.3 1510.2 197.8 1507.3 197 1504.4 196.1 1501.5 195.7 1498.7 195.7 1493.6 195.7 1489 196.9 1484.9 199.2 1480.8 201.6 1477.5 204.6 1475.1 208.3 1473.7 205.6 1471.8 203.2 1469.4 201.4 1467 199.5 1464.3 198.1 1461.4 197.2 1458.5 196.3 1455.7 195.8 1452.9 195.8 1446.9 195.8 1442 197.1 1438.2 199.6 1434.4 202.1 1431.4 205.1 1429.2 208.5L1429.2 197.3 1413.6 197.3 1413.6 274.9 1429.7 274.9ZM1376.9 182.1 1393 182.1 1393 166.3 1376.9 166.3 1376.9 182.1ZM1377.3 274.7 1392.8 274.7 1392.8 197.1 1377.3 197.1 1377.3 274.7ZM1326.9 275.3C1328.2 275 1329.5 274.7 1330.8 274.3L1330.8 264.1 1326.8 264C1323.8 263.8 1321.7 262.7 1320.2 260.8 1318.8 258.9 1318.1 256.1 1318.1 252.5L1318.1 163.2 1302.3 163.2 1302.3 254.2C1302.3 256.9 1302.5 259.6 1303 262.2 1303.5 264.8 1304.4 267.1 1305.9 269.1 1307.3 271.1 1309.5 272.7 1312.2 273.9 1315 275.1 1318.7 275.7 1323.3 275.7 1324.4 275.7 1325.6 275.6 1326.9 275.3M1236 261.5C1233.1 259.2 1231.6 255.9 1231.6 251.8 1231.6 248.2 1232.6 245.2 1234.6 243 1236.6 240.8 1239.4 239.2 1243.2 238.1 1247 237 1251.5 236.5 1256.8 236.4L1267.3 236.2 1267.3 249C1267.3 251 1266.6 253 1265.5 254.9 1264.3 256.8 1262.8 258.5 1260.8 260 1258.9 261.5 1256.7 262.7 1254.3 263.6 1251.9 264.5 1249.5 264.9 1247 264.9 1242.6 265 1238.9 263.8 1236 261.5M1256.9 272.8C1261.3 270.5 1265 266.4 1267.9 260.5L1269.2 274.8 1282.8 274.8 1282.8 220.6C1282.8 215.3 1281.7 210.8 1279.5 207.1 1277.3 203.4 1273.9 200.6 1269.3 198.7 1264.8 196.8 1258.9 195.8 1251.9 195.8 1245.5 195.8 1240 196.7 1235.3 198.5 1230.6 200.3 1226.9 203 1224.2 206.5 1221.5 210 1220 214.4 1219.7 219.5L1233.7 219.5C1234.7 215.1 1236.8 212 1240 210.1 1243.2 208.2 1246.9 207.3 1251.1 207.3 1256.6 207.3 1260.7 208.5 1263.3 211 1265.9 213.6 1267.3 217.1 1267.3 221.5L1267.3 227.1 1254.5 227.5C1241.1 227.8 1231.4 230 1225.3 234.3 1219.2 238.6 1216.1 245 1216.1 253.6 1216.1 258.4 1217.2 262.5 1219.4 265.9 1221.6 269.3 1224.6 271.9 1228.5 273.7 1232.4 275.5 1236.8 276.4 1241.8 276.4 1247.5 276.2 1252.5 275 1256.9 272.8M1153.7 218.9C1155.2 215.5 1157.4 212.8 1160.3 210.6 1163.3 208.5 1167 207.4 1171.4 207.4 1175.8 207.4 1179.4 208.4 1182.2 210.3 1185.1 212.2 1187.2 214.8 1188.6 218.2 1190 221.5 1190.7 225.2 1190.7 229.3L1151.4 229.3C1151.5 225.7 1152.2 222.2 1153.7 218.9M1206.1 239.6 1206.1 234.3C1206.1 226.4 1204.8 219.6 1202.1 213.9 1199.4 208.1 1195.6 203.6 1190.4 200.4 1185.3 197.2 1179 195.6 1171.5 195.6 1163.9 195.6 1157.4 197.4 1152 200.9 1146.6 204.4 1142.5 209.2 1139.6 215.4 1136.7 221.6 1135.3 228.7 1135.3 236.7 1135.3 244.9 1136.9 251.9 1140 257.8 1143.1 263.7 1147.5 268.2 1153.1 271.4 1158.7 274.6 1165.2 276.2 1172.5 276.2 1177.7 276.2 1182.6 275.3 1187.3 273.4 1192 271.5 1196 268.7 1199.3 265 1202.6 261.3 1204.7 256.8 1205.6 251.5L1190.7 251.5C1189.6 255.7 1187.4 258.8 1184.1 260.9 1180.7 263 1176.7 264.1 1172.1 264.1 1167.5 264.1 1163.6 263 1160.5 260.9 1157.4 258.8 1155.1 255.9 1153.6 252.2 1152.1 248.5 1151.3 244.4 1151.3 239.7L1206.1 239.7ZM1061.5 216.3 1061.5 179 1086.9 179C1093.4 179 1098.5 180.6 1102.2 183.6 1106 186.7 1107.9 191.3 1107.9 197.3 1107.9 203.4 1105.8 208.1 1101.7 211.4 1097.5 214.7 1091.7 216.3 1084.1 216.3L1061.5 216.3ZM1103.8 226.5C1107.3 225.1 1110.5 223.2 1113.7 220.7 1116.8 218.3 1119.4 215.1 1121.4 211.2 1123.4 207.3 1124.4 202.4 1124.4 196.6 1124.4 190.4 1123.1 185 1120.5 180.5 1117.9 176 1113.9 172.4 1108.6 170 1103.3 167.5 1096.6 166.3 1088.6 166.3L1045.5 166.3 1045.5 274.8 1061.6 274.8 1061.6 229.4 1088.8 229.4 1108 274.8 1124.9 274.8 1103.8 226.5Z"/>
@@ -238,7 +236,7 @@
         </div>
         <div class="stmt-wrap">
           <p class="stmt" id="statement">
-            <span contenteditable="true" spellcheck="true">Our rewire is not</span>
+            <span contenteditable="true" spellcheck="true">Our process is not</span>
             <span class="blank" contenteditable="true" spellcheck="true" data-field="rewire_not" data-ph="automating the chat"></span><span contenteditable="true" spellcheck="true">, but</span>
             <span class="blank" contenteditable="true" spellcheck="true" data-field="rewire_but" data-ph="freeing someone to own the hard case"></span><span contenteditable="true" spellcheck="true">.</span>
           </p>
@@ -357,7 +355,6 @@ function makeChip(item, opts){
       if (i>=0) S.mergeSel.splice(i,1); else S.mergeSel.push(item.id);
       opts.onSelectChange(); return;
     }
-    if (el._didDrag) return;
     cycleStatus(item); el.dataset.status = item.status; scheduleSave();
   }
   if (!opts.readonly || opts.linkAware){
@@ -377,50 +374,8 @@ function makeChip(item, opts){
     });
     lbl.addEventListener("blur", ()=>{ lbl.contentEditable="false"; item.label = lbl.textContent.trim()||item.label; lbl.textContent=item.label; scheduleSave(); });
     lbl.addEventListener("keydown", (e)=>{ if (e.key==="Enter"){ e.preventDefault(); lbl.blur(); } });
-    if (opts.draggableList) makeDraggable(el, item, opts.draggableList, opts.onReorder, opts.onMerge);
   }
   return el;
-}
-
-function makeDraggable(el, item, listRef, onReorder, onMerge){
-  let sx=0, sy=0, dragging=false;
-  el.addEventListener("pointerdown", (e)=>{
-    if (e.target.closest(".del")) return;
-    if (document.activeElement && document.activeElement.isContentEditable) return;
-    sx=e.clientX; sy=e.clientY; dragging=false; el._didDrag=false;
-    el.setPointerCapture(e.pointerId);
-    const move = (ev)=>{
-      const dx=ev.clientX-sx, dy=ev.clientY-sy;
-      if (!dragging && Math.hypot(dx,dy) > 6){ dragging=true; el.classList.add("dragging"); el._didDrag=true; }
-      if (!dragging) return;
-      const under = document.elementFromPoint(ev.clientX, ev.clientY);
-      const targetChip = under && under.closest(".chip");
-      el.parentElement.querySelectorAll(".chip").forEach((c)=>c.classList.remove("merge-target"));
-      if (targetChip && targetChip!==el && targetChip.parentElement===el.parentElement){
-        const r = targetChip.getBoundingClientRect();
-        const inner = ev.clientX > r.left+r.width*0.22 && ev.clientX < r.right-r.width*0.22;
-        if (inner && onMerge){ targetChip.classList.add("merge-target"); }
-        else {
-          const before = ev.clientX < r.left+r.width/2;
-          targetChip.parentElement.insertBefore(el, before?targetChip:targetChip.nextSibling);
-        }
-      }
-    };
-    const up = (ev)=>{
-      el.removeEventListener("pointermove", move); el.removeEventListener("pointerup", up);
-      el.classList.remove("dragging");
-      const mergeTarget = el.parentElement.querySelector(".merge-target");
-      el.parentElement.querySelectorAll(".chip").forEach((c)=>c.classList.remove("merge-target"));
-      if (mergeTarget && onMerge && mergeTarget!==el){
-        onMerge(item.id, mergeTarget.dataset.id);
-      } else if (dragging && onReorder){
-        const order = [...el.parentElement.querySelectorAll(".chip")].map((c)=>c.dataset.id);
-        onReorder(order);
-      }
-      setTimeout(()=>{ el._didDrag=false; }, 0);
-    };
-    el.addEventListener("pointermove", move); el.addEventListener("pointerup", up);
-  });
 }
 
 function moveItem(list, id, dir){
@@ -436,8 +391,6 @@ function renderTasks(){
       const linkAware = lane===taskLane2;
       const chip = makeChip(t, {
         onDelete: (id)=>{ S.tasks = S.tasks.filter((x)=>x.id!==id); S.constraints.forEach((c)=>c.taskIds=c.taskIds.filter((x)=>x!==id)); renderTasks(); renderConstraints(); scheduleSave(); },
-        draggableList: lane===taskLane ? S.tasks : null,
-        onReorder: lane===taskLane ? (order)=>{ S.tasks.sort((a,b)=>order.indexOf(a.id)-order.indexOf(b.id)); scheduleSave(); } : null,
         arrows: lane===taskLane,
         onMove: lane===taskLane ? (id,dir)=>{ moveItem(S.tasks,id,dir); renderTasks(); scheduleSave(); } : null,
         linkAware,
@@ -479,13 +432,13 @@ function renderConstraints(){
     el.className = "cchip"; el.dataset.kind = c.kind;
     const tag = document.createElement("span"); tag.className="kind-tag"; tag.textContent=c.kind;
     const lbl = document.createElement("span"); lbl.className="lbl"; lbl.textContent=c.label;
-    const del = document.createElement("button"); del.className="del"; del.textContent="×";
+    const del = document.createElement("button"); del.className="del"; del.textContent="×"; del.title="Delete";
     del.addEventListener("click",(e)=>{ e.stopPropagation(); S.constraints=S.constraints.filter((x)=>x.id!==c.id); if(S.linking===c.id) S.linking=null; renderConstraints(); renderTasks(); scheduleSave(); });
     const linkBtn = document.createElement("button"); linkBtn.className="link-btn"; linkBtn.textContent = S.linking===c.id ? "Done" : "🔗 Link";
     if (S.linking===c.id) linkBtn.classList.add("active");
     linkBtn.addEventListener("click",(e)=>{ e.stopPropagation(); S.linking = S.linking===c.id ? null : c.id; renderConstraints(); renderTasks(); });
     const count = document.createElement("div"); count.className="linked-count"; count.textContent = c.taskIds.length ? ("linked: "+c.taskIds.length) : "not linked yet";
-    el.append(tag, lbl, document.createElement("br"), linkBtn, count);
+    el.append(tag, del, lbl, document.createElement("br"), linkBtn, count);
     el.addEventListener("click",(e)=>{ if (e.target.closest("button")) return; if (lbl.isContentEditable) return; cycleKind(c); el.dataset.kind=c.kind; tag.textContent=c.kind; scheduleSave(); });
     lbl.addEventListener("dblclick",(e)=>{ e.stopPropagation(); lbl.contentEditable="true"; lbl.focus(); document.getSelection().selectAllChildren(lbl); });
     lbl.addEventListener("blur", ()=>{ lbl.contentEditable="false"; c.label=lbl.textContent.trim()||c.label; lbl.textContent=c.label; scheduleSave(); });
@@ -515,15 +468,6 @@ function renderRebundle(){
   S.rebundle.forEach((t)=>{
     rebLane.appendChild(makeChip(t,{
       onDelete: (id)=>{ S.rebundle=S.rebundle.filter((x)=>x.id!==id); S.mergeSel=S.mergeSel.filter((x)=>x!==id); renderRebundle(); scheduleSave(); },
-      draggableList: S.rebundle,
-      onReorder: (order)=>{ S.rebundle.sort((a,b)=>order.indexOf(a.id)-order.indexOf(b.id)); scheduleSave(); },
-      onMerge: (fromId, toId)=>{
-        const from = S.rebundle.find((x)=>x.id===fromId), to = S.rebundle.find((x)=>x.id===toId);
-        if (!from||!to) return;
-        to.label = to.label + " + " + from.label;
-        S.rebundle = S.rebundle.filter((x)=>x.id!==fromId);
-        renderRebundle(); scheduleSave();
-      },
       arrows: !S.mergeMode,
       onMove: (id,dir)=>{ moveItem(S.rebundle,id,dir); renderRebundle(); scheduleSave(); },
       selectable: true,
@@ -531,7 +475,7 @@ function renderRebundle(){
     }));
   });
   document.getElementById("counter").innerHTML = "<b>"+S.tasks.length+"</b> original tasks → <b>"+S.rebundle.length+"</b> in the rebundled process"
-    + (S.rebundle.length && S.rebundle.length < S.tasks.length ? " — you merged some into fewer roles." : "");
+    + (S.rebundle.length && S.rebundle.length < S.tasks.length ? ". You merged some into fewer roles." : "");
   document.getElementById("mergeMode").classList.toggle("active", S.mergeMode);
   document.getElementById("mergeMode").textContent = S.mergeMode ? "Done selecting" : "Select to merge";
   document.getElementById("mergeGo").classList.toggle("show", S.mergeMode && S.mergeSel.length>=2);
@@ -564,17 +508,17 @@ document.querySelectorAll("#statement .blank, .oval").forEach((el)=>{
 function briefText(){
   const linked = (c)=> c.taskIds.map((id)=>{ const t=S.tasks.find((x)=>x.id===id); return t?t.label:null; }).filter(Boolean).join(", ");
   return [
-    "REWIRE BRIEF" + (S.processName ? " — " + S.processName : ""),
+    "REWIRE BRIEF" + (S.processName ? ": " + S.processName : ""),
     "",
-    "Our rewire is not " + (S.rewire_not||"____") + ", but " + (S.rewire_but||"____") + ".",
+    "Our process is not " + (S.rewire_not||"____") + ", but " + (S.rewire_but||"____") + ".",
     "",
-    "Tasks: " + (S.tasks.map((t)=>t.label+" ["+t.status+"]").join("; ") || "—"),
-    "Constraints: " + (S.constraints.map((c)=>c.label+" ("+c.kind+(c.taskIds.length?", under: "+linked(c):"")+")").join("; ") || "—"),
-    "Rebundled into: " + (S.rebundle.map((t)=>t.label).join("; ") || "—"),
+    "Tasks: " + (S.tasks.map((t)=>t.label+" ["+t.status+"]").join("; ") || "none yet"),
+    "Constraints: " + (S.constraints.map((c)=>c.label+" ("+c.kind+(c.taskIds.length?", under: "+linked(c):"")+")").join("; ") || "none yet"),
+    "Rebundled into: " + (S.rebundle.map((t)=>t.label).join("; ") || "none yet"),
     "",
-    "What we expect to change: " + (S.change||"—"),
-    "How we will know: " + (S.know||"—"),
-    "What we will not automate yet: " + (S.notyet||"—"),
+    "What we expect to change: " + (S.change||"not yet answered"),
+    "How we will know: " + (S.know||"not yet answered"),
+    "What we will not automate yet: " + (S.notyet||"not yet answered"),
     "",
     "IMD · AI Strategy and Implementation",
     "https://www.imd.org/digital-transformation/aisi/ai-strategy-and-implementation/"
@@ -595,7 +539,7 @@ document.getElementById("btn-copy").addEventListener("click", async ()=>{
   catch(e){ showToast("Could not copy. Select the text and copy it manually."); }
 });
 document.getElementById("btn-mail").addEventListener("click", ()=>{
-  location.href = "mailto:?subject=" + encodeURIComponent("Rewire brief"+(S.processName?" — "+S.processName:"")) + "&body=" + encodeURIComponent(briefText());
+  location.href = "mailto:?subject=" + encodeURIComponent("Rewire brief"+(S.processName?": "+S.processName:"")) + "&body=" + encodeURIComponent(briefText());
 });
 
 /* ---------------- persistence ---------------- */
