@@ -236,7 +236,7 @@
         </div>
         <div class="stmt-wrap">
           <p class="stmt" id="statement">
-            <span contenteditable="true" spellcheck="true">Our process is not</span>
+            <span contenteditable="true" spellcheck="true" id="stmtOpen" data-auto="1">Our process is not</span>
             <span class="blank" contenteditable="true" spellcheck="true" data-field="rewire_not" data-ph="automating the chat"></span><span contenteditable="true" spellcheck="true">, but</span>
             <span class="blank" contenteditable="true" spellcheck="true" data-field="rewire_but" data-ph="freeing someone to own the hard case"></span><span contenteditable="true" spellcheck="true">.</span>
           </p>
@@ -497,9 +497,18 @@ document.getElementById("mergeGo").addEventListener("click", ()=>{
 });
 
 /* ================= OUTCOME (screen 4) ================= */
+function lowerFirst(t){ return t ? t.charAt(0).toLowerCase() + t.slice(1) : t; }
+function openPhrase(){
+  const n = S.processName.trim();
+  return n ? "Our " + lowerFirst(n) + " process is not" : "Our process is not";
+}
 function renderOutcome(){
   document.getElementById("cardProcess").textContent = S.processName || "";
+  const openEl = document.getElementById("stmtOpen");
+  if (openEl.dataset.auto === "1") openEl.textContent = openPhrase();
+  fitStatement();
 }
+document.getElementById("stmtOpen").addEventListener("input", (e)=>{ e.target.dataset.auto = "0"; });
 document.querySelectorAll("#statement .blank, .oval").forEach((el)=>{
   el.addEventListener("input", ()=>{ S[el.dataset.field] = el.textContent.trim(); scheduleSave(); });
   el.addEventListener("keydown",(e)=>{ if (e.key==="Enter"){ e.preventDefault(); el.blur(); } });
