@@ -68,6 +68,10 @@
     border:none; font-size:13px; line-height:1; cursor:pointer; align-items:center; justify-content:center; }
   .chip:hover .del { display:flex; }
   .chip.selected { box-shadow:0 0 0 3px #FC6B27; }
+  .chip.dragging { opacity:0.35; }
+  .chip.drop-before { box-shadow:inset 3px 0 0 var(--navy); }
+  .chip.drop-after { box-shadow:inset -3px 0 0 var(--navy); }
+  .chip.drop-merge { box-shadow:0 0 0 3px var(--sky); }
   .chip .arrows { display:none; position:absolute; bottom:-11px; left:50%; transform:translateX(-50%); gap:2px; }
   .chip:hover .arrows { display:flex; }
   .chip .arrows button { width:20px; height:20px; border-radius:50%; border:1.5px solid var(--blue); background:var(--white); color:var(--blue);
@@ -175,9 +179,9 @@
 
   <section class="screen" id="screen-1" hidden>
     <h1 class="q">Unbundle it into tasks</h1>
-    <p class="hint">Type a task and press Enter, or paste a list separated by commas or semicolons. <strong>Click</strong> a task to set who does it. <strong>Double-click</strong> to rename. Use the arrows to reorder.</p>
+    <p class="hint">Type a task and press Enter, or paste a list separated by commas or semicolons. <strong>Click</strong> a task to set who does it. <strong>Double-click</strong> to rename. Use the arrows to reorder, or drag it.</p>
     <div class="addbar"><input id="taskInput" placeholder="Add a task…"><button id="taskAdd">Add</button>
-      <span class="note">Enter adds one. A comma or semicolon list adds several at once. Use the arrows on a chip to reorder.</span></div>
+      <span class="note">Enter adds one. A comma or semicolon list adds several at once. Use the arrows on a chip to reorder, or drag it.</span></div>
     <div class="legend">
       <span><span class="sw" style="background:#fff;border:1.5px solid #005DC4"></span>Human</span>
       <span><span class="sw" style="background:#D7EAF7"></span>AI assists</span>
@@ -205,14 +209,14 @@
 
   <section class="screen" id="screen-3" hidden>
     <h1 class="q">Rebundle</h1>
-    <p class="hint">Your original tasks are frozen below for reference. Build the new arrangement above them. Select two or more tasks and press <strong>Merge</strong> to combine them into one role. Add new tasks for what is emerging. Delete what is gone.</p>
+    <p class="hint">Your original tasks are frozen below for reference. Build the new arrangement above them. Drag a task onto another to merge them, or select two or more and press <strong>Merge</strong>. Add new tasks for what is emerging. Delete what is gone.</p>
     <div class="lane-label">After: your rebundled process</div>
     <button class="copy-btn" id="copyBefore">Copy tasks from before to start</button>
     <div class="addbar"><input id="rebInput" placeholder="Add a new task or role…"><button id="rebAdd">Add</button></div>
     <div class="mode-row">
       <button class="mode-btn" id="mergeMode">Select to merge</button>
       <button class="merge-go" id="mergeGo">Merge selected →</button>
-      <span class="mode-hint" id="modeHint">Use the arrows on a chip to reorder.</span>
+      <span class="mode-hint" id="modeHint">Use the arrows to reorder, or drag a chip.</span>
     </div>
     <div class="lane empty" id="rebLane"></div>
     <p class="counter" id="counter"></p>
@@ -276,6 +280,7 @@ const newId = () => "n" + (++uid) + "_" + Math.random().toString(36).slice(2,7);
 
 const S = { processName:"", tasks:[], constraints:[], rebundle:[], linking:null, mergeMode:false, mergeSel:[],
   rewire_not:"", rewire_but:"", change:"", know:"", notyet:"" };
+let dragId = null;
 
 const toast = document.getElementById("toast");
 function showToast(msg){ toast.textContent=msg; toast.classList.add("show"); clearTimeout(showToast._t); showToast._t=setTimeout(()=>toast.classList.remove("show"),3000); }
@@ -369,11 +374,50 @@ function makeChip(item, opts){
     el.addEventListener("dblclick", (e)=>{
       if (e.target.closest(".del")) return;
       clearTimeout(el._clickTimer);
+      el.draggable = false;
       lbl.contentEditable="true"; lbl.focus();
       document.getSelection().selectAllChildren(lbl);
     });
-    lbl.addEventListener("blur", ()=>{ lbl.contentEditable="false"; item.label = lbl.textContent.trim()||item.label; lbl.textContent=item.label; scheduleSave(); });
+    lbl.addEventListener("blur", ()=>{
+      lbl.contentEditable="false"; item.label = lbl.textContent.trim()||item.label; lbl.textContent=item.label;
+      if (opts.draggable) el.draggable = true;
+      scheduleSave();
+    });
     lbl.addEventListener("keydown", (e)=>{ if (e.key==="Enter"){ e.preventDefault(); lbl.blur(); } });
+  }
+  if (opts.draggable && !(opts.selectable && S.mergeMode)){
+    el.draggable = true;
+    el.addEventListener("dragstart", (e)=>{
+      if (lbl.isContentEditable){ e.preventDefault(); return; }
+      dragId = item.id;
+      e.dataTransfer.setData("text/plain", item.id);
+      e.dataTransfer.effectAllowed = "move";
+      setTimeout(()=>el.classList.add("dragging"), 0);
+    });
+    el.addEventListener("dragend", ()=>{
+      dragId = null;
+      el.classList.remove("dragging");
+      el.parentElement && el.parentElement.querySelectorAll(".chip").forEach((c)=>c.classList.remove("drop-before","drop-after","drop-merge"));
+    });
+    el.addEventListener("dragover", (e)=>{
+      if (dragId===null || dragId===item.id) return;
+      e.preventDefault();
+      const r = el.getBoundingClientRect();
+      const frac = (e.clientX - r.left) / r.width;
+      el.classList.remove("drop-before","drop-after","drop-merge");
+      if (opts.allowMerge && frac>0.28 && frac<0.72) el.classList.add("drop-merge");
+      else el.classList.add(frac<0.5 ? "drop-before" : "drop-after");
+    });
+    el.addEventListener("dragleave", ()=>{ el.classList.remove("drop-before","drop-after","drop-merge"); });
+    el.addEventListener("drop", (e)=>{
+      e.preventDefault();
+      el.classList.remove("drop-before","drop-after","drop-merge");
+      if (dragId===null || dragId===item.id) return;
+      const r = el.getBoundingClientRect();
+      const frac = (e.clientX - r.left) / r.width;
+      if (opts.allowMerge && frac>0.28 && frac<0.72) opts.onDragMerge(dragId, item.id);
+      else opts.onDragReorder(dragId, item.id, frac<0.5);
+    });
   }
   return el;
 }
@@ -382,6 +426,12 @@ function moveItem(list, id, dir){
   const i = list.findIndex((x)=>x.id===id); if (i<0) return;
   const j = i+dir; if (j<0 || j>=list.length) return;
   const tmp = list[i]; list[i]=list[j]; list[j]=tmp;
+}
+function dropReorder(list, draggedId, targetId, before){
+  const from = list.findIndex((x)=>x.id===draggedId); if (from<0) return;
+  const [moved] = list.splice(from,1);
+  let to = list.findIndex((x)=>x.id===targetId); if (to<0){ list.splice(from,0,moved); return; }
+  list.splice(before?to:to+1, 0, moved);
 }
 function renderTasks(){
   [taskLane, taskLane2].forEach((lane)=>{
@@ -393,6 +443,9 @@ function renderTasks(){
         onDelete: (id)=>{ S.tasks = S.tasks.filter((x)=>x.id!==id); S.constraints.forEach((c)=>c.taskIds=c.taskIds.filter((x)=>x!==id)); renderTasks(); renderConstraints(); scheduleSave(); },
         arrows: lane===taskLane,
         onMove: lane===taskLane ? (id,dir)=>{ moveItem(S.tasks,id,dir); renderTasks(); scheduleSave(); } : null,
+        draggable: lane===taskLane,
+        allowMerge: false,
+        onDragReorder: (draggedId,targetId,before)=>{ dropReorder(S.tasks,draggedId,targetId,before); renderTasks(); scheduleSave(); },
         linkAware,
         onLinkClick: (id)=>{
           const c = S.constraints.find((x)=>x.id===S.linking); if (!c) return;
@@ -470,6 +523,16 @@ function renderRebundle(){
       onDelete: (id)=>{ S.rebundle=S.rebundle.filter((x)=>x.id!==id); S.mergeSel=S.mergeSel.filter((x)=>x!==id); renderRebundle(); scheduleSave(); },
       arrows: !S.mergeMode,
       onMove: (id,dir)=>{ moveItem(S.rebundle,id,dir); renderRebundle(); scheduleSave(); },
+      draggable: true,
+      allowMerge: true,
+      onDragReorder: (draggedId,targetId,before)=>{ dropReorder(S.rebundle,draggedId,targetId,before); renderRebundle(); scheduleSave(); },
+      onDragMerge: (draggedId,targetId)=>{
+        const from = S.rebundle.find((x)=>x.id===draggedId), to = S.rebundle.find((x)=>x.id===targetId);
+        if (!from || !to) return;
+        to.label = to.label + " + " + from.label;
+        S.rebundle = S.rebundle.filter((x)=>x.id!==draggedId);
+        renderRebundle(); scheduleSave();
+      },
       selectable: true,
       onSelectChange: ()=>{ renderRebundle(); }
     }));
