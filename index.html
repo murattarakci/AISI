@@ -99,7 +99,20 @@
   .cchip .link-btn { display:inline-flex; align-items:center; gap:4px; margin-top:5px; font-size:10.5px; font-weight:700; letter-spacing:0.03em;
     padding:3px 9px; border-radius:999px; border:1.5px solid currentColor; background:transparent; color:inherit; cursor:pointer; opacity:0.75; }
   .cchip .link-btn.active { background:#FC6B27; border-color:#FC6B27; color:var(--white); opacity:1; }
-  .cchip .linked-count { font-size:10.5px; opacity:0.65; margin-top:3px; }
+  .crow { display:flex; align-items:center; gap:18px; width:100%; }
+  .crow .cchip { flex:0 0 340px; max-width:340px; }
+  .clinks { flex:1; display:flex; flex-wrap:wrap; align-items:center; gap:8px; min-height:48px; padding:8px 10px; border-radius:10px; border:1.5px dashed transparent; }
+  .clinks.none::before { content:"No tasks yet. Drag a task here, or press Link."; color:#b7bccc; font-size:12.5px; font-style:italic; }
+  .crow.drop-target .clinks { border-color:#FC6B27; background:rgba(252,107,39,0.06); }
+  .mchip { display:inline-flex; align-items:center; gap:6px; padding:5px 6px 5px 11px; border-radius:8px; border:1.5px solid var(--blue);
+    background:var(--white); color:var(--navy); font-size:12.5px; font-weight:500; }
+  .mchip[data-status="assist"] { background:var(--ltblue); }
+  .mchip[data-status="ai"] { background:var(--blue); color:var(--white); }
+  .mchip button { border:none; background:transparent; color:inherit; opacity:0.5; cursor:pointer; font-size:14px; line-height:1; padding:0 3px; }
+  .mchip button:hover { opacity:1; }
+  #taskLane2 .chip.placed { opacity:0.45; }
+  @media (max-width:700px){ .crow { flex-wrap:wrap; } .crow .cchip { flex-basis:100%; max-width:none; } }
+  #taskLane2 .chip[draggable="true"] { cursor:grab; }
 
   .lane.linking .chip { box-shadow:0 0 0 2px rgba(252,107,39,0.0); }
   .lane.linking .chip.linkable { cursor:pointer; box-shadow:0 0 0 2px rgba(252,107,39,0.35); }
@@ -192,7 +205,7 @@
 
   <section class="screen" id="screen-2" hidden>
     <h1 class="q">Find the constraints</h1>
-    <p class="hint">A constraint is not a task. It is what limits the value this process can create. Add one below, then press <strong>Link</strong> and click the task(s) it sits under.</p>
+    <p class="hint">A constraint is not a task. It is what limits the value this process can create. Add one below, then drag the task(s) it sits under onto it, or press <strong>Link</strong> and click them.</p>
     <div class="lane-label">The tasks (for reference)</div>
     <div class="lane empty" id="taskLane2"></div>
     <p class="link-banner" id="linkBanner">Linking mode: click the tasks above that this constraint sits under. Click <b>Link</b> again to finish.</p>
@@ -204,7 +217,7 @@
       <span><span class="sw" style="background:#000A56"></span>Emerges</span>
     </div>
     <div class="lane-label">Constraints</div>
-    <div class="lane empty" id="constrLane" style="flex-direction:column; align-items:flex-start;"></div>
+    <div class="lane empty" id="constrLane" style="flex-direction:column; align-items:stretch;"></div>
   </section>
 
   <section class="screen" id="screen-3" hidden>
@@ -278,6 +291,7 @@ const newId = () => "n" + (++uid) + "_" + Math.random().toString(36).slice(2,7);
 const S = { processName:"", tasks:[], constraints:[], rebundle:[], linking:null, mergeMode:false, mergeSel:[],
   rewire_not:"", rewire_but:"", change:"", know:"", notyet:"" };
 let dragId = null;
+let linkDragId = null;
 
 const toast = document.getElementById("toast");
 function showToast(msg){ toast.textContent=msg; toast.classList.add("show"); clearTimeout(showToast._t); showToast._t=setTimeout(()=>toast.classList.remove("show"),3000); }
@@ -357,7 +371,7 @@ function makeChip(item, opts){
       if (i>=0) S.mergeSel.splice(i,1); else S.mergeSel.push(item.id);
       opts.onSelectChange(); return;
     }
-    cycleStatus(item); el.dataset.status = item.status; scheduleSave();
+    cycleStatus(item); el.dataset.status = item.status; if (opts.linkAware) renderConstraints(); scheduleSave();
   }
   if (!opts.readonly || opts.linkAware){
     el.addEventListener("click", (e)=>{
@@ -451,6 +465,12 @@ function renderTasks(){
           renderTasks(); renderConstraints(); scheduleSave();
         }
       });
+      if (linkAware){
+        if (S.constraints.some((c)=>c.taskIds.includes(t.id))) chip.classList.add("placed");
+        chip.draggable = true;
+        chip.addEventListener("dragstart",(e)=>{ linkDragId = t.id; e.dataTransfer.setData("text/plain", t.id); e.dataTransfer.effectAllowed = "link"; });
+        chip.addEventListener("dragend",()=>{ linkDragId = null; document.querySelectorAll(".crow.drop-target").forEach((r)=>r.classList.remove("drop-target")); });
+      }
       if (linkAware && S.linking){
         chip.classList.add("linkable");
         const c = S.constraints.find((x)=>x.id===S.linking);
@@ -487,13 +507,31 @@ function renderConstraints(){
     const linkBtn = document.createElement("button"); linkBtn.className="link-btn"; linkBtn.textContent = S.linking===c.id ? "Done" : "🔗 Link";
     if (S.linking===c.id) linkBtn.classList.add("active");
     linkBtn.addEventListener("click",(e)=>{ e.stopPropagation(); S.linking = S.linking===c.id ? null : c.id; renderConstraints(); renderTasks(); });
-    const count = document.createElement("div"); count.className="linked-count"; count.textContent = c.taskIds.length ? ("linked: "+c.taskIds.length) : "not linked yet";
-    el.append(tag, del, lbl, document.createElement("br"), linkBtn, count);
+    el.append(tag, del, lbl, document.createElement("br"), linkBtn);
+    const row = document.createElement("div"); row.className = "crow";
+    const links = document.createElement("div"); links.className = "clinks";
+    const linkedTasks = S.tasks.filter((t)=>c.taskIds.includes(t.id));
+    links.classList.toggle("none", linkedTasks.length===0);
+    linkedTasks.forEach((t)=>{
+      const m = document.createElement("span"); m.className = "mchip"; m.dataset.status = t.status;
+      const ml = document.createElement("span"); ml.textContent = t.label;
+      const un = document.createElement("button"); un.textContent = "×"; un.title = "Unlink";
+      un.addEventListener("click",()=>{ c.taskIds = c.taskIds.filter((x)=>x!==t.id); renderConstraints(); renderTasks(); scheduleSave(); });
+      m.append(ml, un); links.appendChild(m);
+    });
+    row.addEventListener("dragover",(e)=>{ if (linkDragId===null) return; e.preventDefault(); row.classList.add("drop-target"); });
+    row.addEventListener("dragleave",(e)=>{ if (!row.contains(e.relatedTarget)) row.classList.remove("drop-target"); });
+    row.addEventListener("drop",(e)=>{
+      if (linkDragId===null) return; e.preventDefault(); row.classList.remove("drop-target");
+      if (!c.taskIds.includes(linkDragId)) c.taskIds.push(linkDragId);
+      linkDragId = null; renderConstraints(); renderTasks(); scheduleSave();
+    });
+    row.append(el, links);
     el.addEventListener("click",(e)=>{ if (e.target.closest("button")) return; if (lbl.isContentEditable) return; cycleKind(c); el.dataset.kind=c.kind; tag.textContent=c.kind; scheduleSave(); });
     lbl.addEventListener("dblclick",(e)=>{ e.stopPropagation(); lbl.contentEditable="true"; lbl.focus(); document.getSelection().selectAllChildren(lbl); });
     lbl.addEventListener("blur", ()=>{ lbl.contentEditable="false"; c.label=lbl.textContent.trim()||c.label; lbl.textContent=c.label; scheduleSave(); });
     lbl.addEventListener("keydown",(e)=>{ if (e.key==="Enter"){ e.preventDefault(); lbl.blur(); } });
-    constrLane.appendChild(el);
+    constrLane.appendChild(row);
   });
 }
 
