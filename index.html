@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rewire Your Process | IMD AI Strategy and Implementation</title>
+<title>Rewire Your Process | IMD</title>
 <meta name="description" content="Unbundle a process into tasks, find its binding constraints, rebundle it, then state what your rewire is not, but is.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Rewire Your Process: IMD AI Strategy and Implementation">
-<meta property="og:description" content="Our process is not ___, but ___. Part of IMD's AI Strategy and Implementation programme.">
+<meta property="og:title" content="Rewire Your Process | IMD">
+<meta property="og:description" content="Our process is not ___, but ___.">
 <meta property="og:url" content="https://murattarakci.github.io/rewire/">
 <meta property="og:image" content="https://murattarakci.github.io/rewire/assets/og-card.png">
 <meta property="og:image:width" content="1200">
@@ -601,7 +601,6 @@ function renderOutcome(){
   document.getElementById("cardProcess").textContent = S.processName || "";
   const openEl = document.getElementById("stmtOpen");
   if (openEl.dataset.auto === "1") openEl.textContent = openPhrase();
-  fitStatement();
 }
 document.getElementById("stmtOpen").addEventListener("input", (e)=>{ e.target.dataset.auto = "0"; });
 document.querySelectorAll("#statement .blank, .oval").forEach((el)=>{
@@ -622,10 +621,7 @@ function briefText(){
     "",
     "What we expect to change: " + (S.change||"not yet answered"),
     "How we will know: " + (S.know||"not yet answered"),
-    "What we will not automate yet: " + (S.notyet||"not yet answered"),
-    "",
-    "IMD · AI Strategy and Implementation",
-    "https://www.imd.org/digital-transformation/aisi/ai-strategy-and-implementation/"
+    "What we will not automate yet: " + (S.notyet||"not yet answered")
   ].join("\n");
 }
 async function renderCard(){
