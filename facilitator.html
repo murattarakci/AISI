@@ -94,7 +94,7 @@
 </div>
 
 <script type="module">
-const PW_HASH = "549c7fee864542f5de2f19293bd6ca2236c5e38588b3983508055d2e9dfbfbc3";
+const PW_HASH = "33ae93233c66297d7f082ed59df02eee0de0bff9b08885a83fea766b1a27bb17";
 const COLL = window.FIREBASE_COLLECTION || "aisi_briefs";
 
 async function sha256(s) { const b = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)); return [...new Uint8Array(b)].map((x) => x.toString(16).padStart(2, "0")).join(""); }

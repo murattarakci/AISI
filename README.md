@@ -42,7 +42,7 @@ the three closing fields, for use during the group debrief.
 
 ## Deploy on GitHub Pages
 Settings → Pages → Source: *Deploy from a branch* → `main` / (root) → Save.
-Live at `https://murattarakci.github.io/AISI/` after a minute.
+Live at `https://murattarakci.github.io/rewire/` after a minute.
 
 ## Facilitator password
 Set in `facilitator.html` as a SHA-256 hash (`PW_HASH`). To change it, run
